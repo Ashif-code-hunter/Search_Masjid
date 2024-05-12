@@ -18,12 +18,15 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap,
+      onTap: () => {
+        {onTap()}
+      },
       child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               color: isSelected ? MyColors.primary : MyColors.white,
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+              borderRadius: const BorderRadius.all(Radius.circular(8))),
           child: Row(
             children: [
               Icon(icon,
@@ -37,7 +40,7 @@ class DrawerTile extends StatelessWidget {
                         fontWeight: FontWeight.w200,
                         color: isSelected
                             ? MyColors.white
-                            : Color.fromRGBO(0, 0, 0, 0.7))),
+                            : const Color.fromRGBO(0, 0, 0, 0.7))),
               )
             ],
           )),

@@ -1,15 +1,13 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, prefer_is_empty, unused_import, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:knm_masjid_app/controller/auth.controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
 
-import 'package:knm_masjid_app/screens/beauty.dart';
-import 'package:knm_masjid_app/screens/fashion.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
 import 'package:knm_masjid_app/screens/search.dart';
-import 'package:knm_masjid_app/screens/cart.dart';
-
 import 'package:knm_masjid_app/widgets/input.dart';
 
 class Navbar extends StatefulWidget implements PreferredSizeWidget {
@@ -73,6 +71,9 @@ class _NavbarState extends State<Navbar> {
     final bool categories =
         widget.categoryOne.isNotEmpty && widget.categoryTwo.isNotEmpty;
     final displaySize = MediaQuery.of(context).size;
+
+    final authC = Get.find<AuthController>();
+
     return Container(
         height: widget.searchBar
             ? displaySize.height * 0.2
@@ -130,12 +131,37 @@ class _NavbarState extends State<Navbar> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        !authC.isLoggedIn.value ? GestureDetector(
+                          onTap: () {
+                            Get.toNamed('/login');
+                          },
+                          child: IconButton(
+                              icon: Icon(Icons.house_outlined,
+                                  color: !widget.transparent
+                                      ? (widget.bgColor == MyColors.white
+                                          ? MyColors.initial
+                                          : MyColors.white)
+                                      : MyColors.white,
+                                  size: 22.0),
+                              onPressed: null),
+                        ) : GestureDetector(
+                          onTap: () {
+                            authC.logOut();
+                            Get.offAllNamed('/login');
+                          },
+                          child: IconButton(
+                              icon: Icon(Icons.logout_outlined,
+                                  color: !widget.transparent
+                                      ? (widget.bgColor == MyColors.white
+                                          ? MyColors.initial
+                                          : MyColors.white)
+                                      : MyColors.white,
+                                  size: 22.0),
+                              onPressed: null),
+                        ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Notifications()));
+                            Get.toNamed('/notifications');
                           },
                           child: IconButton(
                               icon: Icon(Icons.notifications_active,
@@ -179,10 +205,6 @@ class _NavbarState extends State<Navbar> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Beauty()));
                           },
                           child: Row(
                             children: [
@@ -204,10 +226,6 @@ class _NavbarState extends State<Navbar> {
                         SizedBox(width: 30),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Fashion()));
                           },
                           child: Row(
                             children: [

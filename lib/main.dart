@@ -1,40 +1,59 @@
 // ignore_for_file: unnecessary_new, use_key_in_widget_constructors
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:knm_masjid_app/screens/beauty.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:knm_masjid_app/controller/auth.controller.dart';
+import 'package:knm_masjid_app/controller/fav.controller.dart';
+import 'package:knm_masjid_app/controller/masjid.controller.dart';
+import 'package:knm_masjid_app/firebase_options.dart';
+import 'package:knm_masjid_app/screens/announcements.dart';
+import 'package:knm_masjid_app/screens/detailmasjid.dart';
+import 'package:knm_masjid_app/screens/favorites.dart';
 import 'package:knm_masjid_app/screens/login.dart';
-
+import 'package:knm_masjid_app/screens/notify.dart';
 // screens
 import 'package:knm_masjid_app/screens/onboarding.dart';
 import 'package:knm_masjid_app/screens/home.dart';
 import 'package:knm_masjid_app/screens/profile.dart';
-import 'package:knm_masjid_app/screens/settings.dart';
-import 'package:knm_masjid_app/screens/register.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
-import 'package:knm_masjid_app/screens/articles.dart';
-import 'package:knm_masjid_app/screens/elements.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+  await GetStorage.init();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         title: 'KNM Masjid Management',
-        theme: ThemeData(fontFamily: 'OpenSans'),
-        initialRoute: "/login",
+        initialRoute: "/home",
         debugShowCheckedModeBanner: false,
-        routes: <String, WidgetBuilder>{
-          "/onboarding": (BuildContext context) => new Onboarding(),
-          "/login": (BuildContext context) => new Login(),
-          "/register": (BuildContext context) => new Register(),
-          "/home": (BuildContext context) => new Home(),
-          "/profile": (BuildContext context) => new Profile(),
-          "/settings": (BuildContext context) => new Settings(),
-          "/articles": (BuildContext context) => new Articles(),
-          "/elements": (BuildContext context) => new Elements(),
-          "/account": (BuildContext context) => new Register(),
-          "/notifications": (BuildContext context) => new Notifications(),
-        });
+        initialBinding: BindingsBuilder(() {
+          Get.put(AuthController(), permanent: true);
+          Get.put(FavoriteController(), permanent: true);
+          Get.put(MasjidController(), permanent: true);          
+        }),
+        getPages: [
+          GetPage(name: '/onboarding', page: () => const Onboarding()),
+          GetPage(name: '/profile', page: () => Profile()),
+          GetPage(name: '/login', page: () => const Login()),
+          GetPage(name: '/home', page: () => const Home()),
+          GetPage(name: '/detailmasjid', page: () => DetailMasjid()),
+          GetPage(name: '/announcements', page: () => const Announcements()),
+          GetPage(name: '/favorites', page: () => const Favorites(), binding: BindingsBuilder(() {
+          })),
+          GetPage(name: '/notify', page: () => const Notify()),
+          GetPage(name: '/notifications', page: () => Notifications())
+        ],
+        
+        );
   }
 }

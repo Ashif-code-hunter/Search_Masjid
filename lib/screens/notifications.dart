@@ -83,11 +83,11 @@ class _NotificationsState extends State<Notifications> {
   static List<Widget> _widgetOptions = <Widget>[
     Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: PersonalNotifications(),
+      child: GeneralNotification(),
     ),
     Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: SystemNotifications(),
+      child: MasjidNotifications(),
     )
   ];
 
@@ -106,10 +106,10 @@ class _NotificationsState extends State<Notifications> {
         bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: "Personal"),
+                  icon: Icon(Icons.person), label: "General"),
               BottomNavigationBarItem(
-                  icon: Icon(FontAwesomeIcons.database, size: 16),
-                  label: "System")
+                  icon: Icon(FontAwesomeIcons.house, size: 16),
+                  label: "Masjid")
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: MyColors.primary,
@@ -122,7 +122,7 @@ class _NotificationsState extends State<Notifications> {
   }
 }
 
-class PersonalNotifications extends StatelessWidget {
+class GeneralNotification extends StatelessWidget {
   _personalCardBgColor(int index) {
     switch (personalNotificationsList[index]['color']) {
       case 'primary':
@@ -210,7 +210,7 @@ class PersonalNotifications extends StatelessWidget {
   }
 }
 
-class SystemNotifications extends StatelessWidget {
+class MasjidNotifications extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -220,7 +220,6 @@ class SystemNotifications extends StatelessWidget {
           Container(
             color: MyColors.white,
             margin: EdgeInsets.only(top: 32.0),
-            // height: 400,
             child: Column(
               children: [
                 Align(

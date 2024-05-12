@@ -3,6 +3,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
+import 'package:knm_masjid_app/widgets/card-horizontal.dart';
 
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
@@ -46,7 +47,7 @@ class Profile extends StatelessWidget {
                               spreadRadius: 1,
                               blurRadius: 7,
                               offset:
-                                  Offset(0, 3), // changes position of shadow
+                                  Offset(0, 3),
                             ),
                           ],
                         ),
@@ -59,7 +60,7 @@ class Profile extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(5.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  top: 85.0, bottom: 20.0),
+                                  top: 20.0, bottom: 20.0),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -81,12 +82,12 @@ class Profile extends StatelessWidget {
                                                     spreadRadius: 1,
                                                     blurRadius: 7,
                                                     offset: Offset(0,
-                                                        3), // changes position of shadow
+                                                        3), 
                                                   ),
                                                 ],
                                               ),
                                               child: Text(
-                                                "CONNECT",
+                                                "CONTACT",
                                                 style: TextStyle(
                                                     color: MyColors.white,
                                                     fontSize: 12.0,
@@ -111,13 +112,12 @@ class Profile extends StatelessWidget {
                                                         .withOpacity(0.3),
                                                     spreadRadius: 1,
                                                     blurRadius: 7,
-                                                    offset: Offset(0,
-                                                        3), // changes position of shadow
+                                                    offset: Offset(0, 3),
                                                   ),
                                                 ],
                                               ),
                                               child: Text(
-                                                "MESSAGE",
+                                                "EMAIL",
                                                 style: TextStyle(
                                                     color: MyColors.white,
                                                     fontSize: 12.0,
@@ -131,63 +131,8 @@ class Profile extends StatelessWidget {
                                           ],
                                         ),
                                         SizedBox(height: 40.0),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Text("2K",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            82, 95, 127, 1),
-                                                        fontSize: 20.0,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text("Orders",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            50, 50, 93, 1),
-                                                        fontSize: 12.0))
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text("10",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            82, 95, 127, 1),
-                                                        fontSize: 20.0,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text("Photos",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            50, 50, 93, 1),
-                                                        fontSize: 12.0))
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text("89",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            82, 95, 127, 1),
-                                                        fontSize: 20.0,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text("Comments",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            50, 50, 93, 1),
-                                                        fontSize: 12.0))
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(height: 40.0),
                                         Align(
-                                          child: Text("Jessica Jones, 27",
+                                          child: Text("My Masjid",
                                               style: TextStyle(
                                                   color: Color.fromRGBO(
                                                       50, 50, 93, 1),
@@ -195,7 +140,7 @@ class Profile extends StatelessWidget {
                                         ),
                                         SizedBox(height: 10.0),
                                         Align(
-                                          child: Text("San Francisco, USA",
+                                          child: Text("Areekode, Malapuram",
                                               style: TextStyle(
                                                   color: Color.fromRGBO(
                                                       50, 50, 93, 1),
@@ -213,7 +158,7 @@ class Profile extends StatelessWidget {
                                               left: 32.0, right: 32.0),
                                           child: Align(
                                             child: Text(
-                                                "An artist of considerable range, Jessica name taken by Melbourne...",
+                                                "A Masjid In Kerala, Malapuram, Areekode, Methalagadi",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Color.fromRGBO(
@@ -223,14 +168,7 @@ class Profile extends StatelessWidget {
                                                         FontWeight.w200)),
                                           ),
                                         ),
-                                        SizedBox(height: 15.0),
-                                        Align(
-                                            child: Text("Show more",
-                                                style: TextStyle(
-                                                    color: MyColors.primary,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 16.0))),
-                                        SizedBox(height: 25.0),
+                                        SizedBox(height: 30.0),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               right: 25.0, left: 25.0),
@@ -239,14 +177,14 @@ class Profile extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                "Album",
+                                                "My Masjid",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16.0,
                                                     color: MyColors.text),
                                               ),
                                               Text(
-                                                "View All",
+                                                "Show Full",
                                                 style: TextStyle(
                                                     color: MyColors.primary,
                                                     fontSize: 13.0,
@@ -256,81 +194,34 @@ class Profile extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 250,
-                                          child: GridView.count(
-                                              primary: false,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 24.0,
-                                                  vertical: 15.0),
-                                              crossAxisSpacing: 10,
-                                              mainAxisSpacing: 10,
-                                              crossAxisCount: 3,
-                                              children: <Widget>[
+                                        Container(
+                                            padding: EdgeInsets.all(20),
+                                            height: 250,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
                                                 Container(
-                                                    height: 100,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  6.0)),
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              "https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80"),
-                                                          fit: BoxFit.cover),
-                                                    )),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6.0)),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1543747579-795b9c2c3ada?fit=crop&w=240&q=80hoto-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80"),
-                                                      fit: BoxFit.cover),
-                                                )),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6.0)),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1551798507-629020c81463?fit=crop&w=240&q=80"),
-                                                      fit: BoxFit.cover),
-                                                )),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6.0)),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?fit=crop&w=240&q=80"),
-                                                      fit: BoxFit.cover),
-                                                )),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6.0)),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1503642551022-c011aafb3c88?fit=crop&w=240&q=80"),
-                                                      fit: BoxFit.cover),
-                                                )),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6.0)),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1482686115713-0fbcaced6e28?fit=crop&w=240&q=80"),
-                                                      fit: BoxFit.cover),
-                                                )),
-                                              ]),
-                                        )
+                                                  height: 140,
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                            'assets/img/masjid1.jpg'),
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10,),
+                                                Text("My Masjid Name", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                Text(
+                                                  "Avocados are a versatile fruit known for their creamy texture and rich flavor. Packed with healthy fats and nutrients, they're not only delicious but also offer numerous health benefits. Avocado toas",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  )
+                                              ],
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -338,17 +229,17 @@ class Profile extends StatelessWidget {
                               ),
                             )),
                       ),
-                      FractionalTranslation(
-                          translation: Offset(0.0, -0.5),
-                          child: Align(
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  "assets/img/profile-screen-avatar.jpg"),
-                              radius: 65.0,
-                              // maxRadius: 200.0,
-                            ),
-                            alignment: FractionalOffset(0.5, 0.0),
-                          ))
+                      // FractionalTranslation(
+                      //     translation: Offset(0.0, -0.5),
+                      //     child: Align(
+                      //       child: CircleAvatar(
+                      //         backgroundImage: AssetImage(
+                      //             "assets/img/masjid.jpg"),
+                      //         radius: 65.0,
+                      //         // maxRadius: 200.0,
+                      //       ),
+                      //       alignment: FractionalOffset(0.5, 0.0),
+                      //     ))
                     ]),
                   ],
                 ),

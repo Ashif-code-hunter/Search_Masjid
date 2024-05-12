@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
-
 import 'package:flutter/material.dart';
 
 import 'package:knm_masjid_app/constants/Theme.dart';
@@ -10,12 +8,9 @@ import 'package:knm_masjid_app/widgets/table-cell.dart';
 
 import 'package:knm_masjid_app/widgets/drawer.dart';
 
-import 'package:knm_masjid_app/screens/notifications-settings.dart';
-import 'package:knm_masjid_app/screens/privacy.dart';
-import 'package:knm_masjid_app/screens/about.dart';
-import 'package:knm_masjid_app/screens/agreement.dart';
-
 class Settings extends StatefulWidget {
+  const Settings({super.key});
+
   @override
   _SettingsState createState() => _SettingsState();
 }
@@ -42,133 +37,116 @@ class _SettingsState extends State<Settings> {
           searchController: TextEditingController(),
           searchOnChanged: () {},
         ),
-        drawer: MyDrawer.Drawer(currentPage: "Settings"),
-        body: Container(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
+        drawer: const MyDrawer.Drawer(currentPage: "Settings"),
+        body: SingleChildScrollView(
+                  child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          children: [
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text("Recommended Settings",
+                    style: TextStyle(
+                        color: MyColors.text,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18)),
+              ),
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text("These are the most important settings",
+                    style: TextStyle(color: MyColors.text, fontSize: 14)),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("Recommended Settings",
-                        style: TextStyle(
-                            color: MyColors.text,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18)),
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("These are the most important settings",
-                        style: TextStyle(color: MyColors.text, fontSize: 14)),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Use FaceID to signin",
-                        style: TextStyle(color: MyColors.text)),
-                    Switch.adaptive(
-                      value: switchValueOne,
-                      onChanged: (bool newValue) =>
-                          setState(() => switchValueOne = newValue),
-                      activeColor: MyColors.primary,
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Auto-Lock security",
-                        style: TextStyle(color: MyColors.text)),
-                    Switch.adaptive(
-                      value: switchValueTwo,
-                      onChanged: (bool newValue) =>
-                          setState(() => switchValueTwo = newValue),
-                      activeColor: MyColors.primary,
-                    )
-                  ],
-                ),
-                TableCellSettings(
-                    title: "Notifications",
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationsSettings()));
-                    }),
-                SizedBox(height: 36.0),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text("Payment Settings",
-                        style: TextStyle(
-                            color: MyColors.text,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18)),
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("These are also important settings",
-                        style: TextStyle(color: MyColors.text)),
-                  ),
-                ),
-                TableCellSettings(
-                  title: "Manage Payment Options",
-                  onTap: () {},
-                ),
-                TableCellSettings(
-                  title: "Manage Gift Cards",
-                  onTap: () {},
-                ),
-                SizedBox(
-                  height: 36.0,
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text("Privacy Settings",
-                        style: TextStyle(
-                            color: MyColors.text,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18)),
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("Third most important settings",
-                        style: TextStyle(color: MyColors.text)),
-                  ),
-                ),
-                TableCellSettings(
-                    title: "User Agreement",
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserAgreement()));
-                    }),
-                TableCellSettings(
-                    title: "Privacy",
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Privacy()));
-                    }),
-                TableCellSettings(
-                    title: "About",
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => About()));
-                    }),
+                const Text("Use FaceID to signin",
+                    style: TextStyle(color: MyColors.text)),
+                Switch.adaptive(
+                  value: switchValueOne,
+                  onChanged: (bool newValue) =>
+                      setState(() => switchValueOne = newValue),
+                  activeColor: MyColors.primary,
+                )
               ],
             ),
-          ),
-        )));
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Auto-Lock security",
+                    style: TextStyle(color: MyColors.text)),
+                Switch.adaptive(
+                  value: switchValueTwo,
+                  onChanged: (bool newValue) =>
+                      setState(() => switchValueTwo = newValue),
+                  activeColor: MyColors.primary,
+                )
+              ],
+            ),
+            const SizedBox(height: 36.0),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text("Payment Settings",
+                    style: TextStyle(
+                        color: MyColors.text,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18)),
+              ),
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text("These are also important settings",
+                    style: TextStyle(color: MyColors.text)),
+              ),
+            ),
+            TableCellSettings(
+              title: "Manage Payment Options",
+              onTap: () {},
+            ),
+            TableCellSettings(
+              title: "Manage Gift Cards",
+              onTap: () {},
+            ),
+            const SizedBox(
+              height: 36.0,
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text("Privacy Settings",
+                    style: TextStyle(
+                        color: MyColors.text,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18)),
+              ),
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text("Third most important settings",
+                    style: TextStyle(color: MyColors.text)),
+              ),
+            ),
+            TableCellSettings(
+                title: "User Agreement",
+                onTap: () {
+                }),
+            TableCellSettings(
+                title: "Privacy",
+                onTap: () {
+                }),
+            TableCellSettings(
+                title: "About",
+                onTap: () {
+                }),
+          ],
+        ),
+                  ),
+                ));
   }
 }

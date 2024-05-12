@@ -6,14 +6,7 @@ import 'package:knm_masjid_app/constants/Images.dart';
 
 // widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
-import 'package:knm_masjid_app/widgets/card-horizontal.dart';
-import 'package:knm_masjid_app/widgets/card-small.dart';
 import 'package:knm_masjid_app/widgets/table-cell.dart';
-
-//screens
-import 'package:knm_masjid_app/screens/detailmasjid.dart';
-import 'package:knm_masjid_app/screens/beauty.dart';
-import 'package:knm_masjid_app/screens/fashion.dart';
 
 final Map<String, List<Map>> productCards = {
   "Shoes": [
@@ -137,7 +130,6 @@ class _SearchState extends State<Search> {
             }
           }).toList());
     }
-    print(results);
   }
 
   @override
@@ -159,23 +151,16 @@ class _SearchState extends State<Search> {
             _searchText(searchText);
           },
           searchAutofocus: true,
-          // searchController: myController
         ),
         backgroundColor: MyColors.bgColorScreen,
         body: Container(
             padding: EdgeInsets.only(left: 27, right: 27, top: 24),
             child: searchText.isNotEmpty
-                ? (results.length != 0
+                ? (results.isNotEmpty
                     ? ListView.builder(
                         itemCount: results.length,
                         itemBuilder: (BuildContext context, int index) =>
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: CardHorizontal(
-                                title: results[index]["title"],
-                                img: results[index]["image"],
-                              ),
-                            ))
+                            Container())
                     : SingleChildScrollView(
                         child: Container(
                           child: Column(
@@ -198,11 +183,6 @@ class _SearchState extends State<Search> {
                                 child: TableCellSettings(
                                     title: "Fashion",
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Fashion(),
-                                          ));
                                     }),
                               ),
                               Padding(
@@ -211,11 +191,6 @@ class _SearchState extends State<Search> {
                                 child: TableCellSettings(
                                     title: "Beauty",
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Beauty(),
-                                          ));
                                     }),
                               ),
                               Padding(
@@ -225,24 +200,7 @@ class _SearchState extends State<Search> {
                                     style: TextStyle(
                                         fontSize: 18, color: MyColors.text)),
                               ),
-                              Row(
-                                children: [
-                                  CardSmall(
-                                      img: productCards["Places"]?[2]["image"],
-                                      title: productCards["Places"]?[2]
-                                          ["title"],
-                                      tap: () {}),
-                                  CardSmall(
-                                      img: productCards["Places"]?[1]["image"],
-                                      title: productCards["Places"]?[1]
-                                          ["title"],
-                                      tap: () {})
-                                ],
-                              ),
-                              CardHorizontal(
-                                img: productCards["Places"]?[0]["image"],
-                                title: productCards["Places"]?[0]["title"],
-                              )
+
                             ],
                           ),
                         ),

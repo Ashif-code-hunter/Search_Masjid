@@ -1,22 +1,22 @@
-// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, use_key_in_widget_constructors, prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, prefer_const_declarations
-
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
-
-import 'package:login_widget/login_widget.dart';
-import 'package:simple_snackbar/simple_snackbar.dart';
+import 'package:knm_masjid_app/controller/auth.controller.dart';
 
 //widgets
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final authC = Get.put(AuthController());
+
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   String? _genericValidator(String? input) {
@@ -30,26 +30,39 @@ class _LoginState extends State<Login> {
     return null;
   }
 
+  void _login() async {
+    String username = _emailController.text;
+    String password = _passwordController.text;
+    bool isLogged = await authC.login(username, password);
+    if (isLogged) {
+      Get.offAllNamed('/home');
+      return;
+    }
+    Get.snackbar("Error", "Invalid username or password");
+  }
+
   @override
   void initState() {
-    _usernameController.text = 'knmadmin';
-    _passwordController.text = '12345678';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = MyColors.initial;
+    const Color textColor = MyColors.initial;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
+        leading: BackButton(color: textColor, onPressed: () => Get.back()),
+      ),
       body: Container(
         constraints: const BoxConstraints.expand(),
-        decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
+        decoration: const BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
         child: Center(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Color.fromRGBO(245, 245, 245, 1),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -57,35 +70,35 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "KNM",
+                const Text(
+                  "Masjid Login",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: textColor),
                 ),
-                Text("Masjid Management System",
+                const Text("Masjid Management System",
                     style: TextStyle(color: textColor)),
-                SizedBox(height: 60),
+                const SizedBox(height: 60),
                 Form(
                     child: Column(children: [
                   TextFormField(
-                    style: TextStyle(color: textColor),
-                    controller: _usernameController,
+                    style: const TextStyle(color: textColor),
+                    controller: _emailController,
                     cursorColor: textColor,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
                       labelStyle: TextStyle(color: textColor),
                       border: OutlineInputBorder(),
                     ),
                     validator: _genericValidator,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     obscureText: true,
-                    style: TextStyle(color: textColor),
+                    style: const TextStyle(color: textColor),
                     controller: _passwordController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Password',
                       hoverColor: MyColors.white,
                       labelStyle: TextStyle(color: textColor),
@@ -93,41 +106,31 @@ class _LoginState extends State<Login> {
                     ),
                     validator: _genericValidator,
                   ),
-                  SizedBox(height: 5),
-                  Row(
+                  const SizedBox(height: 5),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text("Forgot Password?",
                           style: TextStyle(color: textColor)),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ])),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: MyColors.initial,
-                      fixedSize: Size(double.maxFinite, 50),
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      fixedSize: const Size(double.maxFinite, 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5))),
                   onPressed: () {
-                    // final snackBar = simpleSnackBar(
-                    //     buildContext: context,
-                    //     messageText: "Logging You In",
-                    //     backgroundColor: Colors.white,
-                    //     displayDismiss: true,
-                    //     textColor: Colors.black,
-                    //     snackBarType: SnackBarType.success);
-                    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                    Navigator.pushReplacementNamed(context, '/home');
+                    _login();
                   },
-                  child: Text("Login",
+                  child: const Text("Login",
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                 ),
-                SizedBox(height: 5),
-                Row(
+                const SizedBox(height: 5),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(

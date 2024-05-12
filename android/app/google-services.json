@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590179013583",
+    "project_id": "knm-masjid-app",
+    "storage_bucket": "knm-masjid-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590179013583:android:9fd717b6572e110c0878ba",
+        "android_client_info": {
+          "package_name": "org.knm.masjid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUGs1XMU-OgtP4IgAgCLFjS79cSR6yCMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

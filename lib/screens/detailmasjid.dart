@@ -1,23 +1,19 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, unused_import, avoid_print, unnecessary_this
-
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
+import 'package:knm_masjid_app/model/majid.dart';
 
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
-import 'package:knm_masjid_app/widgets/slider.dart';
 
-import 'package:knm_masjid_app/screens/chat.dart';
-import 'package:knm_masjid_app/data/temp.dart';
 
 class DetailMasjid extends StatelessWidget {
   final GFBottomSheetController _controller = GFBottomSheetController();
 
-  Map<String, dynamic> data;
+  DetailMasjid({super.key});
 
-  DetailMasjid({required this.data});
+  final Masjid data = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +23,9 @@ class DetailMasjid extends StatelessWidget {
         backButton: true,
         getCurrentPage: () {},
         searchController: TextEditingController(),
-        searchOnChanged: () {},
+        searchOnChanged: () {
+          
+        },
       ),
       extendBody: true,
       backgroundColor: MyColors.bgColorScreen,
@@ -42,40 +40,89 @@ class DetailMasjid extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 10.0),
-                    child: Text(data["name"]!,
-                        style: TextStyle(fontSize: 28.0, color: MyColors.text)),
+                    child: Text(data.name,
+                        style: const TextStyle(fontSize: 28.0, color: MyColors.text)),
                   ),
-                  Text(data["address"]!,
+                  Text(data.address,
                       overflow: TextOverflow.fade,
                       maxLines: 3,
-                      style: TextStyle(color: MyColors.text, fontSize: 14.0)),
-                  SizedBox(height: 28),
-                  Container(
+                      style: const TextStyle(color: MyColors.text, fontSize: 14.0)),
+                  const SizedBox(height: 28),
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: ListView.builder(
                         itemBuilder: (BuildContext context, int index) {
-                          String type = data["members"]![index]["type"]!;
-                          return GFListTile(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: type == 'main' ? 0 : 20),
-                            avatar: type == 'sub'
-                                ? null
-                                : GFAvatar(
+                          String type = data.members[index].type;
+                          return GestureDetector(
+                            onTap: () => {
+                              type == "main" ? Get.dialog(
+                                AlertDialog(
+                                  icon: GFAvatar(
+                                    shape: GFAvatarShape.standard,
+                                    radius: 50,
                                     backgroundImage: AssetImage(
-                                        data["members"]![index]["image"]!),
+                                        data.members[index].image ?? ''),
                                   ),
-                            icon: type == 'sub'
-                                ? Icon(
-                                    Icons.person,
-                                    color: MyColors.initial,
-                                  )
-                                : Container(),
-                            titleText: data["members"]![index]["name"]!,
-                            subTitleText: data["members"]![index]["position"],
+                                  backgroundColor: Colors.white,
+                                  content: SizedBox(
+                                    height: 63,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          data.members[index].name,
+                                          style: const TextStyle(
+                                              color: MyColors.text,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          data.members[index].position,
+                                          style: const TextStyle(
+                                              color: MyColors.text,
+                                              fontSize: 14.0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    IconButton(
+                                        onPressed: (() {
+                                          Get.back();
+                                        }),
+                                        icon: const Icon(
+                                          Icons.chat_bubble,
+                                          color: MyColors.initial,
+                                        )),
+                                                                        IconButton(onPressed: (() {
+                                      Get.back();
+                                    }), icon: const Icon(Icons.call, color: MyColors.initial,)),
+                                  ]
+                                )
+                              ) : Container()
+                            },
+                            child: GFListTile(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: type == 'main' ? 0 : 20),
+                              avatar: type == 'sub'
+                                  ? null
+                                  : GFAvatar(
+                                      backgroundImage: AssetImage(
+                                          data.members[index].image ?? ''),
+                                    ),
+                              icon: type == 'sub'
+                                  ? const Icon(
+                                      Icons.call,
+                                      color: MyColors.initial,
+                                    )
+                                  : Container(),
+                              titleText: data.members[index].name,
+                              subTitleText: data.members[index].position,
+                            ),
                           );
                         },
-                        itemCount: data["members"]!.length),
+                        itemCount: data.members.length),
                   )
                 ],
               ),
@@ -83,12 +130,12 @@ class DetailMasjid extends StatelessWidget {
           ),
         ),
       ]),
-      bottomSheet: _buildBottomSheet(this.data, context),
+      bottomSheet: _buildBottomSheet(data, context),
       floatingActionButton: FloatingActionButton(
           backgroundColor: MyColors.initial,
           child: _controller.isBottomSheetOpened
-              ? Icon(Icons.keyboard_arrow_down, color: Colors.white)
-              : Icon(Icons.keyboard_arrow_up, color: Colors.white),
+              ? const Icon(Icons.keyboard_arrow_down, color: Colors.white)
+              : const Icon(Icons.keyboard_arrow_up, color: Colors.white),
           onPressed: () {
             _controller.isBottomSheetOpened
                 ? _controller.hideBottomSheet()
@@ -98,14 +145,14 @@ class DetailMasjid extends StatelessWidget {
   }
 
   GFBottomSheet _buildBottomSheet(
-      Map<String, dynamic> data, BuildContext context) {
+      Masjid data, BuildContext context) {
     return GFBottomSheet(
       controller: _controller,
       animationDuration: 100,
       maxContentHeight: 150,
       stickyHeaderHeight: 100,
       stickyHeader: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.white,
             boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 0)]),
         child: const GFListTile(
@@ -119,7 +166,7 @@ class DetailMasjid extends StatelessWidget {
       ),
       contentBody: Container(
         height: MediaQuery.of(context).size.height * 0.5,
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: ListView(
           shrinkWrap: true,
           physics: const ScrollPhysics(),
@@ -128,11 +175,11 @@ class DetailMasjid extends StatelessWidget {
               children: [
                 Center(
                     child: Text(
-                  data["address"]!,
-                  style: TextStyle(
+                  data.address,
+                  style: const TextStyle(
                       fontSize: 15, wordSpacing: 0.3, letterSpacing: 0.2),
                 )),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -142,13 +189,12 @@ class DetailMasjid extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             fixedSize: Size(
                                 MediaQuery.of(context).size.width / 2.5, 50),
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)))),
                         onPressed: () {
-                          print("Call");
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.message),
@@ -159,14 +205,13 @@ class DetailMasjid extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             fixedSize: Size(
                                 MediaQuery.of(context).size.width / 2.5, 50),
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)))),
                         onPressed: () {
                           // Respond to button press
-                          print("Call");
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.map),
@@ -182,7 +227,7 @@ class DetailMasjid extends StatelessWidget {
       ),
       stickyFooter: Container(
         color: MyColors.initial,
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(

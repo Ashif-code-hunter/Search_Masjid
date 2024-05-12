@@ -1,72 +1,89 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_import
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-
+import 'package:get/get.dart';
+import 'package:knm_masjid_app/api/masjid.api.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
-import 'package:knm_masjid_app/data/temp.dart';
-import 'package:knm_masjid_app/screens/about.dart';
-import 'package:knm_masjid_app/screens/chat.dart';
-import 'package:knm_masjid_app/screens/elements.dart';
-import 'package:knm_masjid_app/screens/profile.dart';
-import 'package:knm_masjid_app/screens/settings.dart';
-
+import 'package:knm_masjid_app/controller/masjid.controller.dart';
+import 'package:knm_masjid_app/model/majid.dart';
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
 import 'package:knm_masjid_app/widgets/card-horizontal.dart';
-import 'package:knm_masjid_app/widgets/card-small.dart';
 import 'package:knm_masjid_app/widgets/card-square.dart';
 import 'package:knm_masjid_app/widgets/drawer.dart';
 
-import 'package:knm_masjid_app/screens/detailmasjid.dart';
 
 class Home extends StatelessWidget {
+  const Home({super.key});
+
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> data = knm_masjid_temp_data;
     return Scaffold(
       appBar: Navbar(
         title: "Home",
         searchBar: true,
         getCurrentPage: () {},
         searchController: TextEditingController(),
-        searchOnChanged: () {},
+        searchOnChanged: (String value) {
+          Get.find<MasjidController>().searchQuary(value);
+        },
       ),
       backgroundColor: MyColors.bgColorScreen,
-      drawer: MyDrawer.Drawer(currentPage: "Home"),
+      drawer: const MyDrawer.Drawer(currentPage: "Home"),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  String? type = data[index]['type'];
-                  return type == "registered"
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0, top: 10),
-                          child: _buildCardSquare(
-                              context,
-                              data[0]['name'],
-                              data[index]['name']!,
-                              data[index]['image']!,
-                              data[index]),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: _buildCardHorizontal(
-                              context,
-                              data[index]['name'],
-                              data[index]['address'],
-                              data[index]['image']!,
-                              data[index]),
-                        );
-                },
-                itemCount: data.length,
-              ),
-            ),
+              child: FutureBuilder(
+                  future: MasjidAPI().getAllMasjidAPI('masjids', null),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      List<DocumentSnapshot<Object?>> data = snapshot.data!;
+                      Get.find<MasjidController>().setMasjid(data);
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          Map<String, dynamic> masjid =
+                              data[index].data() as Map<String, dynamic>;
+                          Masjid masjidData = Masjid.fromJson(masjid);
+                          String type = masjidData.type.toString();
+                          return type == "registered"
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 10.0, top: 10),
+                                  child: _buildCardSquare(
+                                      context,
+                                      masjidData.name,
+                                      masjidData.address,
+                                      masjidData.image,
+                                      masjidData),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: _buildCardHorizontal(
+                                      context,
+                                      masjidData.name,
+                                      masjidData.address,
+                                      masjidData.image,
+                                      masjidData
+                                      ),
+                                );
+                        },
+                        itemCount: data.length,
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+            )
           ],
         ),
       ),
@@ -74,31 +91,32 @@ class Home extends StatelessWidget {
   }
 
   Widget _buildCardHorizontal(BuildContext context, String tag, String title,
-      String img, Map<String, dynamic> data) {
+      String img, Masjid data) {
     return GestureDetector(
       child: CardHorizontal(
         cta: "View more",
         title: title,
         img: img,
+        id: data.id,
       ),
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DetailMasjid(data: data)));
+        Get.toNamed('/detailmasjid', arguments: data);
       },
     );
   }
 
   Widget _buildCardSquare(BuildContext context, String tag, String title,
-      String img, Map<String, dynamic> data) {
+      String img, Masjid data) {
+  
     return GestureDetector(
       child: CardSquare(
         cta: "View more",
         title: title,
         img: img,
+        id: data.id,
       ),
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DetailMasjid(data: data)));
+        Get.toNamed('/detailmasjid', arguments: data);
       },
     );
   }

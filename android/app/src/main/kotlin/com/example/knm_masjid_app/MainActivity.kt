@@ -1,4 +1,4 @@
-package com.example.knm_masjid_app
+package org.knm.masjid
 
 import io.flutter.embedding.android.FlutterActivity
 

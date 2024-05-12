@@ -1,24 +1,32 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, avoid_print, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
+import 'package:knm_masjid_app/controller/fav.controller.dart';
 
 class CardHorizontal extends StatelessWidget {
-  CardHorizontal(
+  const CardHorizontal(
       {this.title = "Placeholder Title",
       this.cta = "",
-      this.img = "https://via.placeholder.com/200"});
+      this.img = "https://via.placeholder.com/200",
+      required this.id,
+      });
 
   final String cta;
   final String img;
   final String title;
+  final String id;
 
   static void defaultFunc() {
     print("the function works!");
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
+
+    final favC = Get.find<FavoriteController>();
+
     return Container(
         height: 150,
         child: Card(
@@ -52,11 +60,31 @@ class CardHorizontal extends StatelessWidget {
                             maxLines: 4,
                             style: TextStyle(
                                 color: MyColors.header, fontSize: 13)),
-                        Text(cta,
-                            style: TextStyle(
-                                color: MyColors.primary,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600))
+                        Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              cta,
+                              style: TextStyle(
+                                  color: MyColors.primary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Obx(() => IconButton(
+                                onPressed: () => {favC.toggleFav(id)},
+                                icon: Icon(
+                                    favC.isFavorite(id)
+                                        ? Icons.favorite
+                                        : Icons.favorite_outline,
+                                    color: favC.isFavorite(id)
+                                        ? Colors.redAccent
+                                        : MyColors.initial,
+                                    size: 20),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ))
