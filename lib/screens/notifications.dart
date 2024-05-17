@@ -10,59 +10,47 @@ import 'package:knm_masjid_app/widgets/navbar.dart';
 final List<Map<String, String>> personalNotificationsList = [
   {
     "text":
-        "About your order #45C23B Wifey made the best Father's Day meal ever. So thankful so happy.",
+        "The new message from the author.",
     "time": "15:30",
     "color": "primary"
   },
   {
     "text":
-        "Customize our products. Now you can make the best and perfect clothes just for you.",
+        "The new message from the author..",
     "time": "12:10",
     "color": "info"
   },
-  {
-    "text":
-        "Breaking News! We have new methods to payment. Learn how to pay off debt fast using the stack method.",
-    "time": "11:23",
-    "color": "error"
-  },
-  {
-    "text":
-        "Congratulations! Someone just ordered a pair of Yamaha HS8 speakers through your app! Hurry up and ship them!",
-    "time": "04:23",
-    "color": "success"
-  }
 ];
 
 final Map<String, List<Map<String, String>>> systemNotificationsList = {
   "Unread notifications": [
     {
       "description": "The new message from the author.",
-      "title": "New message",
-      "time": "2 hrs ago"
+      "title": "Some Notification",
+      "time": "5 days go"
     },
     {
-      "description": "A confirmed request by one party.",
-      "title": "New order",
-      "time": "3 hrs ago"
-    }
+      "description": "The new message from the author.",
+      "title": "Test Notification",
+      "time": "2 days go"
+    },
+        {
+      "description": "The new message from the author.",
+      "title": "Some Notification",
+      "time": "5 days go"
+    },
   ],
   "Read notifications": [
     {
-      "description": "Let's meet at Starbucks at 11:30. Wdyt?",
-      "title": "Last message",
-      "time": "1 day ago"
+      "description": "The new message from the author.",
+      "title": "Some Notification",
+      "time": "5 days go"
     },
     {
-      "description": "A new issue has been reported for Argon.",
-      "title": "Product issue",
+      "description": "The new message from the author.",
+      "title": "Test Notification",
       "time": "2 days go"
     },
-    {
-      "description": "Your posts have been liked a lot.",
-      "title": "New likes",
-      "time": "4 days ago"
-    }
   ]
 };
 
@@ -182,7 +170,7 @@ class GeneralNotification extends StatelessWidget {
                             child: CircleAvatar(
                                 radius: 24,
                                 backgroundColor: _personalCardBgColor(index),
-                                child: Icon(Icons.local_shipping,
+                                child: Icon(Icons.notifications,
                                     color: MyColors.white, size: 24.0)),
                           ),
                           Flexible(
