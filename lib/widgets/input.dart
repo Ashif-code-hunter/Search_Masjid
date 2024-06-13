@@ -13,8 +13,8 @@ class Input extends StatelessWidget {
   final bool autofocus;
   final Color borderColor;
 
-  Input(
-      {required this.placeholder,
+  const Input(
+      {super.key, required this.placeholder,
       this.suffixIcon = const Icon(Icons.search, color: Colors.transparent),
       this.prefixIcon = const Icon(Icons.search, color: Colors.transparent),
       required this.onTap,

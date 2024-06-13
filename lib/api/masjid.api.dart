@@ -22,6 +22,7 @@ class MasjidAPI {
         .where('name', isLessThan: '${searchQuery}z')
         .get();
     List<DocumentSnapshot<Object?>> masjidList = querySnapshot.docs;
+    print(masjidList);
     return masjidList;
   }
 

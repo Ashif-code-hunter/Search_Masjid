@@ -37,6 +37,7 @@ class MasjidController extends GetxController {
         }
       }
     });
+    print(masjidList);
   }
 
   @override

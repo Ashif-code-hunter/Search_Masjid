@@ -2,5 +2,6 @@
 
 enum UserRole {
   ADMIN,
+  COMMITTEE,
   MASJID
 } 

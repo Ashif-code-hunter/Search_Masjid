@@ -8,6 +8,7 @@ import 'package:knm_masjid_app/controller/auth.controller.dart';
 import 'package:knm_masjid_app/controller/fav.controller.dart';
 import 'package:knm_masjid_app/controller/masjid.controller.dart';
 import 'package:knm_masjid_app/firebase_options.dart';
+import 'package:knm_masjid_app/screens/add_masjid.dart';
 import 'package:knm_masjid_app/screens/announcements.dart';
 import 'package:knm_masjid_app/screens/detailmasjid.dart';
 import 'package:knm_masjid_app/screens/favorites.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/home', page: () => const Home()),
           GetPage(name: '/detailmasjid', page: () => DetailMasjid()),
           GetPage(name: '/announcements', page: () => const Announcements()),
+          GetPage(name: '/add_masjid', page: () => const AddMasjid()),
           GetPage(name: '/favorites', page: () => const Favorites(), binding: BindingsBuilder(() {
           })),
           GetPage(name: '/notify', page: () => const Notify()),

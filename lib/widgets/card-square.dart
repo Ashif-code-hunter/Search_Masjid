@@ -24,7 +24,7 @@ class CardSquare extends StatelessWidget {
     final favC = Get.find<FavoriteController>();
 
     return SizedBox(
-        height: size.height * 0.35,
+        height: 280,
         width: null,
         child: Card(
             elevation: 0.4,

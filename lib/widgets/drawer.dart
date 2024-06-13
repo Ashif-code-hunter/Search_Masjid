@@ -22,7 +22,7 @@ class MyDrawer extends StatelessWidget {
       color: MyColors.white,
       child: Column(children: [
         Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.12,
             width: MediaQuery.of(context).size.width * 0.85,
             child: SafeArea(
               bottom: false,
@@ -76,6 +76,15 @@ class MyDrawer extends StatelessWidget {
                 onTap: () => {
                   Get.back(),
                   Get.offAllNamed('/announcements')
+                },
+              ) : Container(),
+              authC.isLoggedIn.value && authC.user.value?.role == UserRole.ADMIN ? DrawerTile(
+                title: "Add Masjid",
+                icon: Icons.announcement_rounded,
+                isSelected: currentPage == "Add Masjid" ? true : false,
+                onTap: () => {
+                  Get.back(),
+                  Get.offAllNamed('/add_masjid')
                 },
               ) : Container(),
               authC.isLoggedIn.value ? DrawerTile(

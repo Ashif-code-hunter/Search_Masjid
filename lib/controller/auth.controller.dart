@@ -10,10 +10,6 @@ class AuthController extends GetxController {
   final box = GetStorage();
 
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
 
   String getName(){

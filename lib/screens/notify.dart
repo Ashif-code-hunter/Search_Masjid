@@ -117,10 +117,10 @@ class _NotifyState extends State<Notify> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(Size(Get.width, 50)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                fixedSize: WidgetStateProperty.all<Size>(Size(Get.width, 50)),
+                backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

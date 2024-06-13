@@ -3,7 +3,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
-import 'package:knm_masjid_app/widgets/card-horizontal.dart';
 
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';

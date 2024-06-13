@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -42,7 +41,7 @@ class _ImageSliderState extends State<ImageSlider> {
         ),
         Container(
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: widget.imgArray.map((url) {
@@ -50,12 +49,12 @@ class _ImageSliderState extends State<ImageSlider> {
               return Container(
                 width: 8.0,
                 height: 8.0,
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _current == index
-                      ? Color.fromRGBO(255, 255, 255, 0.9)
-                      : Color.fromRGBO(255, 255, 255, 0.4),
+                      ? const Color.fromRGBO(255, 255, 255, 0.9)
+                      : const Color.fromRGBO(255, 255, 255, 0.4),
                 ),
               );
             }).toList(),

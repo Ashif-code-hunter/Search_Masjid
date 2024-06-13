@@ -12,7 +12,7 @@ class StretchableButton extends StatelessWidget {
   final Color buttonBorderColor;
   final List<Widget> children;
 
-  StretchableButton({
+  const StretchableButton({
     required this.buttonColor,
     required this.borderRadius,
     required this.children,

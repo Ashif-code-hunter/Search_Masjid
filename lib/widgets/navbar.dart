@@ -27,8 +27,8 @@ class Navbar extends StatefulWidget implements PreferredSizeWidget {
   final bool noShadow;
   final Color bgColor;
 
-  Navbar(
-      {this.title = "Home",
+  const Navbar(
+      {super.key, this.title = "Home",
       this.categoryOne = "",
       this.categoryTwo = "",
       this.tags = const [],
@@ -77,7 +77,7 @@ class _NavbarState extends State<Navbar> {
     return Container(
         height: widget.searchBar
             ? displaySize.height * 0.2
-            : displaySize.height * 0.1,
+            : displaySize.height * 0.12,
         decoration: BoxDecoration(
             color: !widget.transparent ? widget.bgColor : Colors.transparent,
             boxShadow: [
@@ -240,7 +240,7 @@ class _NavbarState extends State<Navbar> {
                         )
                       ],
                     )
-                  : Container(
+                  : SizedBox(
                       height: 1,
                       child: ScrollablePositionedList.builder(
                         itemScrollController: _scrollController,
