@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:knm_masjid_app/api/masjid.api.dart';
@@ -10,6 +11,8 @@ import 'package:knm_masjid_app/widgets/navbar.dart';
 import 'package:knm_masjid_app/widgets/card-horizontal.dart';
 import 'package:knm_masjid_app/widgets/card-square.dart';
 import 'package:knm_masjid_app/widgets/drawer.dart';
+
+import '../controller/send_push_notication.dart';
 
 
 class Home extends StatelessWidget {
@@ -86,6 +89,24 @@ class Home extends StatelessWidget {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+       await FirebaseAnalytics.instance.logEvent(
+          name: 'level_completed',
+          parameters: {
+            'level_number': 9,
+          },
+        );
+        print("ddddddddd");
+       Get.find<SendPushController>().searchUsers();
+        // await FirebaseAnalytics.instance.logEvent(
+        //   name: "ADMIN",
+        //   parameters: {
+        //     "role": "ADMIN",
+        //   },
+        // );
+      },
+      child: Icon(Icons.abc),
       ),
     );
   }

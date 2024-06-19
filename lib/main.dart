@@ -22,6 +22,7 @@ import 'package:knm_masjid_app/screens/home.dart';
 import 'package:knm_masjid_app/screens/profile.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
 
+import 'controller/send_push_notication.dart';
 import 'enum/role.dart';
 import 'model/push_notification_model/push_notification_model.dart';
 
@@ -76,6 +77,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await _messaging.getToken();
+      Get.find<AuthController>().setFCM(token ?? "");
       print("token $token");
       // For handling the received notifications
     }
@@ -133,6 +135,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
           Get.put(AuthController(), permanent: true);
           Get.put(FavoriteController(), permanent: true);
           Get.put(MasjidController(), permanent: true);
+          Get.put(SendPushController(), permanent: true);
         }),
         getPages: [
           GetPage(name: '/onboarding', page: () => const Onboarding()),

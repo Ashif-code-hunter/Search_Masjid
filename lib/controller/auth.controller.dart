@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,11 +9,15 @@ import 'package:knm_masjid_app/model/user.dart';
 class AuthController extends GetxController {
 
   RxBool isLoggedIn = false.obs;
+  String fcmToken = '';
   Rxn<UserModel?> user = Rxn<UserModel?>();
   UserModel? userModel;
   final box = GetStorage();
   String getName(){
     return user.value?.name ?? user.value?.email ?? 'Guest User';
+  }
+  void setFCM(String fcm){
+    fcmToken = fcm;
   }
 
   bool valiedateTheLogin(String username, String password) {
@@ -20,6 +25,7 @@ class AuthController extends GetxController {
       Get.snackbar('Error', 'Please enter a username');
       return false;
     }
+
 
 
 
@@ -72,6 +78,7 @@ class AuthController extends GetxController {
           await FirebaseFirestore.instance.collection('users').doc(authuser.uid).set({
             'email': authuser.email,
             'role': UserRole.MASJID.name,
+            'fcm':fcmToken,
           }); /// move this function to registration
           final userDoc = await FirebaseFirestore.instance
               .collection('users')
@@ -92,8 +99,19 @@ class AuthController extends GetxController {
                   ? UserRole.MASJID
                   : UserRole.COMMITTEE, // ! #TODO
             );
-
             if (FirebaseAuth.instance.currentUser != null) {
+              print("dddd11");
+               try{
+                 await FirebaseAnalytics.instance.logEvent(
+                   name: role,
+                   parameters: {
+                     "role": role,
+                   },
+                 );
+               }catch(e){
+                 print("dddddddddd $e");
+               }
+              print("dddd");
               user.value = userModel;
               isLoggedIn.value = true;
               box.write('user', user.value!.toJson());
