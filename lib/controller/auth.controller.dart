@@ -73,7 +73,6 @@ class AuthController extends GetxController {
             'email': authuser.email,
             'role': UserRole.MASJID.name,
           }); /// move this function to registration
-
           final userDoc = await FirebaseFirestore.instance
               .collection('users')
               .doc(authuser.uid)
