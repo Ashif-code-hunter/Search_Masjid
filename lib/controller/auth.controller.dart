@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -5,13 +6,11 @@ import 'package:knm_masjid_app/enum/role.dart';
 import 'package:knm_masjid_app/model/user.dart';
 
 class AuthController extends GetxController {
+
   RxBool isLoggedIn = false.obs;
   Rxn<UserModel?> user = Rxn<UserModel?>();
+  UserModel? userModel;
   final box = GetStorage();
-
-
-
-
   String getName(){
     return user.value?.name ?? user.value?.email ?? 'Guest User';
   }
@@ -22,10 +21,14 @@ class AuthController extends GetxController {
       return false;
     }
 
+
+
     if (password.isEmpty) {
       Get.snackbar('Error', 'Please enter a password');
       return false;
     }
+
+
 
     if (password.length < 8) {
       Get.snackbar('Error', 'Password must be at least 8 characters long');
@@ -43,6 +46,8 @@ class AuthController extends GetxController {
     return true;
   }
 
+
+
   Future<bool> logOut() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -56,29 +61,55 @@ class AuthController extends GetxController {
     }
   }
 
+
   Future<bool> login(String email, String password) async {
     try {
-      AuthCredential credential =
-          EmailAuthProvider.credential(email: email, password: password);
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final authuser = userCredential.user;
       if (authuser != null) {
-        UserModel usermodel = UserModel(
-          userID: authuser.uid,
-          phoneNumber: authuser.phoneNumber,
-          photoURL: authuser.photoURL,
-          name: authuser.displayName,
-          email: authuser.email,
-          password: password,
-          role: UserRole.MASJID, // ! #TODO
-        );
-        if (FirebaseAuth.instance.currentUser != null) {
-          user.value = usermodel;
-          isLoggedIn.value = true;
-          box.write('user', user.value!.toJson());
-          Get.snackbar('Hi There', "Login Successful");
-          return true;
+        try {
+          await FirebaseFirestore.instance.collection('users').doc(authuser.uid).set({
+            'email': authuser.email,
+            'role': UserRole.MASJID.name,
+          }); /// move this function to registration
+
+          final userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(authuser.uid)
+              .get();
+          if (userDoc.exists) {
+            final role = userDoc.data()?['role'] ?? 'viewer';
+            userModel = UserModel(
+              userID: authuser.uid,
+              phoneNumber: authuser.phoneNumber,
+              photoURL: authuser.photoURL,
+              name: authuser.displayName,
+              email: authuser.email,
+              password: password,
+              role: role == "ADMIN"
+                  ? UserRole.ADMIN
+                  : role == "MASJID"
+                  ? UserRole.MASJID
+                  : UserRole.COMMITTEE, // ! #TODO
+            );
+
+            if (FirebaseAuth.instance.currentUser != null) {
+              user.value = userModel;
+              isLoggedIn.value = true;
+              box.write('user', user.value!.toJson());
+              Get.snackbar('Hi There', "Login Successful");
+              return true;
+            }
+          } else {
+
+            // User document doesn't exist in the 'users' collection
+            // You can handle this case based on your app's logic
+            return false;
+          }
+        } catch (e) {
+          print("error $e");
+          return false;
         }
       }
       return false;
