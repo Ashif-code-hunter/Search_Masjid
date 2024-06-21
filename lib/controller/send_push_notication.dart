@@ -24,20 +24,19 @@ Future<bool> sendPushNotification({required String title, required String body, 
 }
 
   Future<bool> searchUsers({required String title, required String body, required String tag}) async {
-   await api.searchFCMAPI("ADMIN").then((value){
+   await api.searchFCMAPI().then((value){
      fcmList.clear();
       for (var documentSnapshot in value.docs) {
         if (documentSnapshot.exists ) {
-          if(documentSnapshot['role'] == UserRoleLocal.MASJID.name){
+          if(documentSnapshot['role'] == tag){
             String fcmToken = documentSnapshot['fcm'];
             fcmList.add(fcmToken);
           }
         }
       }
     });
-  final result = await sendPushNotification(title: "FCM NOTIFICATION",body: "FCM NOTIFICATION BODY",tag: "ADMIN");
+  final result = await sendPushNotification(title: title,body: body,tag: tag);
    return result;
-    print(fcmList);
   }
 
 

@@ -93,20 +93,9 @@ class Home extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
-       await FirebaseAnalytics.instance.logEvent(
-          name: 'level_completed',
-          parameters: {
-            'level_number': 9,
-          },
-        );
-        print("ddddddddd");
+
        Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body: "FCM",title: "FCM List body");
-        // await FirebaseAnalytics.instance.logEvent(
-        //   name: "ADMIN",
-        //   parameters: {
-        //     "role": "ADMIN",
-        //   },
-        // );
+
       },
       child: Icon(Icons.abc),
       ),

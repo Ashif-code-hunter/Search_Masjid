@@ -75,7 +75,6 @@ class PushNotificationAPI {
             }
           }
         };
-
         final response = await http.post(
           Uri.parse('https://fcm.googleapis.com/v1/projects/knm-masjid-app/messages:send'),
           headers: headers,
@@ -100,7 +99,7 @@ class PushNotificationAPI {
     }
   }
 
-  Future<QuerySnapshot<Object?>> searchFCMAPI(String searchQuery) async {
+  Future<QuerySnapshot<Object?>> searchFCMAPI() async {
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('users').get();
 
