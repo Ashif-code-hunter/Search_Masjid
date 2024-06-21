@@ -23,8 +23,6 @@ import 'package:knm_masjid_app/screens/profile.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controller/send_push_notication.dart';
-import 'enum/role.dart';
-import 'model/push_notification_model/push_notification_model.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
@@ -61,16 +59,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
   late final FirebaseMessaging _messaging;
-  PushNotification? _notificationInfo;
+  // PushNotification? _notificationInfo;
 
   void requestAndRegisterNotification() async {
-    // 1. Initialize the Firebase app
     await Firebase.initializeApp();
-    // 2. Instantiate Firebase Messaging
     _messaging = FirebaseMessaging.instance;
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     _messaging.setForegroundNotificationPresentationOptions(badge: true, alert: true, sound: true);
-    // 3. On iOS, this helps to take the user permissions
     NotificationSettings settings = await _messaging.requestPermission(
       alert: true,
       badge: true,
@@ -81,7 +76,6 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
       String? token = await _messaging.getToken();
       Get.find<AuthController>().setFCM(token ?? "");
       print("token $token");
-      // For handling the received notifications
     }
   }
   Future<void> overlayPushNotification() async {
