@@ -9,25 +9,34 @@ import 'package:knm_masjid_app/model/majid.dart';
 import '../api/push_notification_apis.dart';
 
 class SendPushController extends GetxController {
-  List fcmList = [];
+  List<String> fcmList = [];
   RxString searchQuary = ''.obs;
+  PushNotificationAPI api = PushNotificationAPI();
 
 
+Future<bool> sendPushNotification({required String title, required String body, required String tag})async{
+  await api.sendNotification(title: title, body: body, tokens:fcmList, tag: tag).then((value){
+    if(value == true){
+      return true;
+    }
+  });
+  return false;
+}
 
-  Future<void> searchUsers() async {
-    PushNotificationAPI api = PushNotificationAPI();
+  Future<bool> searchUsers({required String title, required String body, required String tag}) async {
    await api.searchFCMAPI("ADMIN").then((value){
      fcmList.clear();
       for (var documentSnapshot in value.docs) {
         if (documentSnapshot.exists ) {
-          if(documentSnapshot['role'] == UserRole.MASJID.name){
+          if(documentSnapshot['role'] == UserRoleLocal.MASJID.name){
             String fcmToken = documentSnapshot['fcm'];
             fcmList.add(fcmToken);
           }
-
         }
       }
     });
+  final result = await sendPushNotification(title: "FCM NOTIFICATION",body: "FCM NOTIFICATION BODY",tag: "ADMIN");
+   return result;
     print(fcmList);
   }
 

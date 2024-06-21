@@ -69,7 +69,7 @@ class MyDrawer extends StatelessWidget {
                 },
                 isSelected: currentPage == "Home" ? true : false,
               ),
-              authC.isLoggedIn.value && authC.user.value?.role == UserRole.ADMIN ? DrawerTile(
+              authC.isLoggedIn.value && authC.user.value?.role == UserRoleLocal.ADMIN ? DrawerTile(
                 title: "Announcements",
                 icon: Icons.announcement_rounded,
                 isSelected: currentPage == "Announcements" ? true : false,
@@ -78,7 +78,7 @@ class MyDrawer extends StatelessWidget {
                   Get.offAllNamed('/announcements')
                 },
               ) : Container(),
-              authC.isLoggedIn.value && authC.user.value?.role == UserRole.ADMIN ? DrawerTile(
+              authC.isLoggedIn.value && authC.user.value?.role == UserRoleLocal.ADMIN ? DrawerTile(
                 title: "Add Masjid",
                 icon: Icons.announcement_rounded,
                 isSelected: currentPage == "Add Masjid" ? true : false,

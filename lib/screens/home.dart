@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/dfareporting/v4.dart';
 import 'package:knm_masjid_app/api/masjid.api.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
 import 'package:knm_masjid_app/controller/masjid.controller.dart';
+import 'package:knm_masjid_app/enum/role.dart';
 import 'package:knm_masjid_app/model/majid.dart';
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
@@ -98,7 +100,7 @@ class Home extends StatelessWidget {
           },
         );
         print("ddddddddd");
-       Get.find<SendPushController>().searchUsers();
+       Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body: "FCM",title: "FCM List body");
         // await FirebaseAnalytics.instance.logEvent(
         //   name: "ADMIN",
         //   parameters: {

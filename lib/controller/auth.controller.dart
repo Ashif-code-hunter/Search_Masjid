@@ -77,7 +77,7 @@ class AuthController extends GetxController {
         try {
           await FirebaseFirestore.instance.collection('users').doc(authuser.uid).set({
             'email': authuser.email,
-            'role': UserRole.MASJID.name,
+            'role': UserRoleLocal.MASJID.name,
             'fcm':fcmToken,
           }); /// move this function to registration
           final userDoc = await FirebaseFirestore.instance
@@ -94,10 +94,10 @@ class AuthController extends GetxController {
               email: authuser.email,
               password: password,
               role: role == "ADMIN"
-                  ? UserRole.ADMIN
+                  ? UserRoleLocal.ADMIN
                   : role == "MASJID"
-                  ? UserRole.MASJID
-                  : UserRole.COMMITTEE, // ! #TODO
+                  ? UserRoleLocal.MASJID
+                  : UserRoleLocal.COMMITTEE, // ! #TODO
             );
             if (FirebaseAuth.instance.currentUser != null) {
               print("dddd11");

@@ -21,27 +21,28 @@ import 'package:knm_masjid_app/screens/onboarding.dart';
 import 'package:knm_masjid_app/screens/home.dart';
 import 'package:knm_masjid_app/screens/profile.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controller/send_push_notication.dart';
 import 'enum/role.dart';
 import 'model/push_notification_model/push_notification_model.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Parse the message received
-  PushNotification notification = PushNotification(
-      title: message.notification?.title,
-      body: message.notification?.body,
-      userRole: message.data.isNotEmpty && message.data.containsKey('userRole') ? message.data['userRole'] : UserRole.COMMITTEE.name
-  );
-
-  // Save the notification data to Firestore
-  await FirebaseFirestore.instance.collection('notifications').doc().set({
-    'title': message.notification?.title,
-    'body': message.notification?.body,
-    'userRole': message.data.isNotEmpty && message.data.containsKey('userRole') ? message.data['userRole'] : UserRole.COMMITTEE.name
-  });
+  ///below code is commented as we don't want to save the message each time the user receives the message instead we are saving one time at the time of sending.
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // // Parse the message received
+  // PushNotification notification = PushNotification(
+  //     title: message.notification?.title,
+  //     body: message.notification?.body,
+  //     userRole: message.data.isNotEmpty && message.data.containsKey('userRole') ? message.data['userRole'] : UserRole.COMMITTEE.name
+  // );
+  //
+  // // Save the notification data to Firestore
+  // await FirebaseFirestore.instance.collection('notifications').doc().set({
+  //   'title': message.notification?.title,
+  //   'body': message.notification?.body,
+  //   'userRole': message.data.isNotEmpty && message.data.containsKey('userRole') ? message.data['userRole'] : UserRole.COMMITTEE.name
+  // });
 }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
   await GetStorage.init();
+  await dotenv.load(fileName: "assets/.env");
   runApp(MyApp());
 }
 
@@ -83,45 +85,47 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
     }
   }
   Future<void> overlayPushNotification() async {
+    ///below code is commented as we don't want to save the message each time the user receives the message instead we are saving one time at the time of sending.
 
-
-
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge:true,
-      sound: true,
-    );
-
-
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
-      // Parse the message received
-      PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
-        userRole: message.data.isNotEmpty && message.data.containsKey('userRole')? message.data['userRole'] : UserRole.COMMITTEE.name
-      );
-      if(message.notification?.body !=null){
-        setState(() {
-          _notificationInfo = notification;
-        });
-        if (_notificationInfo != null) {
-          // For displaying the notification as an overlay
-          await FirebaseFirestore.instance.collection('notifications').doc().set({
-            'title': message.notification?.title,
-            'body': message.notification?.body,
-            'userRole':  message.data.isNotEmpty && message.data.containsKey('userRole')? message.data['userRole'] : UserRole.COMMITTEE.name
-          });
-        }
-      }
-    });
+    //
+    //
+    // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    //   alert: true,
+    //   badge:true,
+    //   sound: true,
+    // );
+    //
+    //
+    //
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+    //   // Parse the message received
+    //   PushNotification notification = PushNotification(
+    //     title: message.notification?.title,
+    //     body: message.notification?.body,
+    //     userRole: message.data.isNotEmpty && message.data.containsKey('userRole')? message.data['userRole'] : UserRoleLocal.COMMITTEE.name
+    //   );
+    //   if(message.notification?.body !=null){
+    //     setState(() {
+    //       _notificationInfo = notification;
+    //     });
+    //     print("fixx");
+    //     // if (_notificationInfo != null) {
+    //     //   // For displaying the notification as an overlay
+    //     //   await FirebaseFirestore.instance.collection('notifications').doc().set({
+    //     //     'title': message.notification?.title,
+    //     //     'body': message.notification?.body,
+    //     //     'userRole':  message.data.isNotEmpty && message.data.containsKey('userRole')? message.data['userRole'] : UserRole.COMMITTEE.name
+    //     //   });
+    //     // }
+    //   }
+    // });
   }
   @override
   void initState() {
     super.initState();
     requestAndRegisterNotification();
-    overlayPushNotification();
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // overlayPushNotification();
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
 
