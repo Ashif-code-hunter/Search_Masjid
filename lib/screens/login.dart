@@ -16,8 +16,12 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final authC = Get.put(AuthController());
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(
+    text: 'eesaard@gmail.com',
+  );
+  final _passwordController = TextEditingController(
+    text: 'eesahello123',
+  );
 
   String? _genericValidator(String? input) {
     if (input == null) {
@@ -33,6 +37,7 @@ class _LoginState extends State<Login> {
   void _login() async {
     String username = _emailController.text;
     String password = _passwordController.text;
+    Get.snackbar("Loading..", "Signing You In");
     bool isLogged = await authC.login(username, password);
     if (isLogged) {
       Get.offAllNamed('/home');
@@ -130,19 +135,6 @@ class _LoginState extends State<Login> {
                           color: Colors.black, fontWeight: FontWeight.bold)),
                 ),
                 const SizedBox(height: 5),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account?",
-                      style: TextStyle(color: MyColors.muted),
-                    ),
-                    Text(
-                      " Register here",
-                      style: TextStyle(color: textColor),
-                    )
-                  ],
-                )
               ],
             ),
           ),

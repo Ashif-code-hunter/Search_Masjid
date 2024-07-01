@@ -65,7 +65,7 @@ class MyDrawer extends StatelessWidget {
                 icon: Icons.home,
                 onTap: () => {
                   Get.back(),
-                  Get.offAllNamed('/home')
+                  Get.toNamed('/home')
                 },
                 isSelected: currentPage == "Home" ? true : false,
               ),
@@ -75,16 +75,16 @@ class MyDrawer extends StatelessWidget {
                 isSelected: currentPage == "Announcements" ? true : false,
                 onTap: () => {
                   Get.back(),
-                  Get.offAllNamed('/announcements')
+                  Get.toNamed('/announcements')
                 },
               ) : Container(),
               authC.isLoggedIn.value && authC.user.value?.role == UserRoleLocal.ADMIN ? DrawerTile(
                 title: "Add Masjid",
-                icon: Icons.announcement_rounded,
+                icon: Icons.add,
                 isSelected: currentPage == "Add Masjid" ? true : false,
                 onTap: () => {
                   Get.back(),
-                  Get.offAllNamed('/add_masjid')
+                  Get.toNamed('/add_masjid')
                 },
               ) : Container(),
               authC.isLoggedIn.value ? DrawerTile(
@@ -92,7 +92,7 @@ class MyDrawer extends StatelessWidget {
                 icon: Icons.message,
                 onTap: () => {
                   Get.back(),
-                  Get.offAllNamed('/notify')
+                  Get.toNamed('/notify')
                 },
                 isSelected: currentPage == "Notify" ? true : false,
               ): Container(),
@@ -101,7 +101,7 @@ class MyDrawer extends StatelessWidget {
                 icon: Icons.favorite,
                 onTap: () => {
                   Get.back(),
-                  Get.offAllNamed('/favorites')
+                  Get.toNamed('/favorites')
                 },
                 isSelected: currentPage == "Favorites" ? true : false,
               ),

@@ -4,7 +4,8 @@ class Masjid {
   String address;
   String image;
   String type;
-  List<Member> members;
+  List<Member>? members;
+  String? fcmToken; // Add this field
 
   Masjid({
     required this.id,
@@ -12,7 +13,8 @@ class Masjid {
     required this.address,
     required this.image,
     required this.type,
-    required this.members,
+    this.members,
+    this.fcmToken,
   });
 
   factory Masjid.fromJson(Map<String, dynamic> json) {
@@ -22,14 +24,18 @@ class Masjid {
       address: json['address'],
       image: json['image'],
       type: json['type'],
-      members: (json['members'] as List)
-          .map((e) => Member(
-              name: e['name'],
-              image: e['image'],
-              position: e['position'],
-              phone: e['phone'],
-              type: e['type']))
-          .toList(),
+      members: (json['members'] as List).map(
+        (e) {
+          return Member(
+            name: e['name'] ?? '',
+            image: e['image'],
+            position: e['position'],
+            phone: e['phone'],
+            type: e['type'],
+          );
+        },
+      ).toList(),
+      fcmToken: json['fcmToken'], // Add this field
     );
   }
 
@@ -40,15 +46,15 @@ class Masjid {
       'address': address,
       'image': image,
       'type': type,
-      'members': members
+      'members': members,
+      'fcmToken': fcmToken, // Add this field
     };
   }
 
   @override
   String toString() {
-    return 'Masjid{ id: $id ,name: $name, address: $address, image: $image, type: $type, members: $members}';
+    return 'Masjid{id: $id, name: $name, address: $address, image: $image, type: $type, members: $members, fcmToken: $fcmToken}';
   }
-
 }
 
 class Member {
@@ -82,7 +88,7 @@ class Member {
       'image': image,
       'position': position,
       'phone': phone,
-      'type': type
+      'type': type,
     };
   }
 }

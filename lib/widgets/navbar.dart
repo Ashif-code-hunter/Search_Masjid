@@ -136,7 +136,7 @@ class _NavbarState extends State<Navbar> {
                             Get.toNamed('/login');
                           },
                           child: IconButton(
-                              icon: Icon(Icons.house_outlined,
+                              icon: Icon(Icons.login_outlined,
                                   color: !widget.transparent
                                       ? (widget.bgColor == MyColors.white
                                           ? MyColors.initial

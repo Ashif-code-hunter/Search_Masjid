@@ -3,5 +3,6 @@
 enum UserRoleLocal {
   ADMIN,
   COMMITTEE,
-  MASJID
+  MASJID,
+  VIEWER
 } 

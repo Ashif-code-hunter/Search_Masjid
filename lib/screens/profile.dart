@@ -2,13 +2,19 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
+import 'package:knm_masjid_app/controller/auth.controller.dart';
 
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
 import 'package:knm_masjid_app/widgets/drawer.dart';
 
 class Profile extends StatelessWidget {
+
+
+  final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +137,7 @@ class Profile extends StatelessWidget {
                                         ),
                                         SizedBox(height: 40.0),
                                         Align(
-                                          child: Text("My Masjid",
+                                          child: Text(authC.user.value!.masjid?.name ?? "Guest",
                                               style: TextStyle(
                                                   color: Color.fromRGBO(
                                                       50, 50, 93, 1),

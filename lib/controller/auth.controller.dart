@@ -1,58 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:knm_masjid_app/enum/role.dart';
+import 'package:knm_masjid_app/model/majid.dart';
 import 'package:knm_masjid_app/model/user.dart';
 
 class AuthController extends GetxController {
-
   RxBool isLoggedIn = false.obs;
   String fcmToken = '';
   Rxn<UserModel?> user = Rxn<UserModel?>();
-  UserModel? userModel;
   final box = GetStorage();
-  String getName(){
+
+
+  String getName() {
     return user.value?.name ?? user.value?.email ?? 'Guest User';
   }
-  void setFCM(String fcm){
+
+  void setFCM(String fcm) {
     fcmToken = fcm;
   }
-
-  bool valiedateTheLogin(String username, String password) {
-    if (username.isEmpty) {
-      Get.snackbar('Error', 'Please enter a username');
-      return false;
-    }
-
-
-
-
-    if (password.isEmpty) {
-      Get.snackbar('Error', 'Please enter a password');
-      return false;
-    }
-
-
-
-    if (password.length < 8) {
-      Get.snackbar('Error', 'Password must be at least 8 characters long');
-      return false;
-    }
-    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
-    bool hasDigits = password.contains(RegExp(r'[0-9]'));
-    bool hasSpecialChars = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-
-    if (!hasUppercase || !hasDigits || !hasSpecialChars) {
-      Get.snackbar('Error',
-          'Password must contain at least one uppercase letter, one digit, and one special character');
-      return false;
-    }
-    return true;
-  }
-
-
 
   Future<bool> logOut() async {
     try {
@@ -67,71 +34,61 @@ class AuthController extends GetxController {
     }
   }
 
-
   Future<bool> login(String email, String password) async {
+    final credential = EmailAuthProvider.credential(email: email, password: password);
     try {
-      AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      final authuser = userCredential.user;
-      if (authuser != null) {
-        try {
-          await FirebaseFirestore.instance.collection('users').doc(authuser.uid).set({
-            'email': authuser.email,
-            'role': UserRoleLocal.MASJID.name,
-            'fcm':fcmToken,
-          }); /// move this function to registration
-          final userDoc = await FirebaseFirestore.instance
-              .collection('users')
-              .doc(authuser.uid)
-              .get();
-          if (userDoc.exists) {
-            final role = userDoc.data()?['role'] ?? 'viewer';
-            userModel = UserModel(
-              userID: authuser.uid,
-              phoneNumber: authuser.phoneNumber,
-              photoURL: authuser.photoURL,
-              name: authuser.displayName,
-              email: authuser.email,
-              password: password,
-              role: role == "ADMIN"
-                  ? UserRoleLocal.ADMIN
-                  : role == "MASJID"
-                  ? UserRoleLocal.MASJID
-                  : UserRoleLocal.COMMITTEE, // ! #TODO
-            );
-            if (FirebaseAuth.instance.currentUser != null) {
-              print("dddd11");
-               try{
-                 await FirebaseAnalytics.instance.logEvent(
-                   name: role,
-                   parameters: {
-                     "role": role,
-                   },
-                 );
-               }catch(e){
-                 print("dddddddddd $e");
-               }
-              print("dddd");
-              user.value = userModel;
-              isLoggedIn.value = true;
-              box.write('user', user.value!.toJson());
-              Get.snackbar('Hi There', "Login Successful");
-              return true;
-            }
-          } else {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
 
-            // User document doesn't exist in the 'users' collection
-            // You can handle this case based on your app's logic
-            return false;
-          }
-        } catch (e) {
-          print("error $e");
-          return false;
+      if (!userDoc.exists) {
+        throw Exception('User not found');
+      }
+
+      final role = userDoc.data()?['role'] ?? 'viewer';
+      final userRole =
+          UserRoleLocal.values.firstWhere((r) => r.toString().contains(role), orElse: () => UserRoleLocal.VIEWER);
+      final userModel = UserModel(
+        userID: userCredential.user!.uid,
+        phoneNumber: userCredential.user!.phoneNumber,
+        photoURL: userCredential.user!.photoURL,
+        name: userCredential.user!.displayName,
+        email: userCredential.user!.email,
+        password: password,
+        role: userRole,
+      );
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        user.value = userModel;
+        isLoggedIn.value = true;
+        box.write('user', userModel);
+        Get.snackbar('Hi There', "Login Successful");
+        return true;
+      }
+
+      if (userRole == UserRoleLocal.MASJID) {
+        final masjidDoc = await FirebaseFirestore.instance
+            .collection('masjids')
+            .where('email', isEqualTo: userCredential.user!.email)
+            .get();
+
+        if (masjidDoc.docs.isNotEmpty) {
+          userModel.masjid = Masjid.fromJson(masjidDoc.docs.first.data());
+        } else {
+          throw Exception('Masjid not found');
         }
       }
-      return false;
+
+      return true;
     } catch (e) {
+      Get.snackbar('Error', e.toString());
       return false;
     }
+  }
+
+  UserModel? getStoredUser() {
+    return box.read('user');
   }
 }

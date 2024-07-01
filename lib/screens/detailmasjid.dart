@@ -13,7 +13,7 @@ class DetailMasjid extends StatelessWidget {
 
   DetailMasjid({super.key});
 
-  final Masjid data = Get.arguments;
+  final Masjid data = Get.arguments ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class DetailMasjid extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: ListView.builder(
                         itemBuilder: (BuildContext context, int index) {
-                          String type = data.members[index].type;
+                          String type = data.members![index].type;
                           return GestureDetector(
                             onTap: () => {
                               type == "main" ? Get.dialog(
@@ -61,7 +61,7 @@ class DetailMasjid extends StatelessWidget {
                                     shape: GFAvatarShape.standard,
                                     radius: 50,
                                     backgroundImage: AssetImage(
-                                        data.members[index].image ?? ''),
+                                        data.members?[index].image ?? ''),
                                   ),
                                   backgroundColor: Colors.white,
                                   content: SizedBox(
@@ -70,14 +70,14 @@ class DetailMasjid extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          data.members[index].name,
+                                          data.members![index].name,
                                           style: const TextStyle(
                                               color: MyColors.text,
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          data.members[index].position,
+                                          data.members![index].position,
                                           style: const TextStyle(
                                               color: MyColors.text,
                                               fontSize: 14.0),
@@ -109,7 +109,7 @@ class DetailMasjid extends StatelessWidget {
                                   ? null
                                   : GFAvatar(
                                       backgroundImage: AssetImage(
-                                          data.members[index].image ?? ''),
+                                          data.members?[index].image ?? ''),
                                     ),
                               icon: type == 'sub'
                                   ? const Icon(
@@ -117,12 +117,12 @@ class DetailMasjid extends StatelessWidget {
                                       color: MyColors.initial,
                                     )
                                   : Container(),
-                              titleText: data.members[index].name,
-                              subTitleText: data.members[index].position,
+                              titleText: data.members![index].name,
+                              subTitleText: data.members![index].position,
                             ),
                           );
                         },
-                        itemCount: data.members.length),
+                        itemCount: data.members?.length ?? 0),
                   )
                 ],
               ),
