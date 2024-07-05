@@ -38,15 +38,15 @@ class AuthController extends GetxController {
     final credential = EmailAuthProvider.credential(email: email, password: password);
     try {
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      final userDoc = await FirebaseFirestore.instance
+      final doc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
+          .doc(userCredential.user!.uid);
+      final userDoc = await doc.get();
 
       if (!userDoc.exists) {
         throw Exception('User not found');
       }
-
+      await doc.update({'fcm': fcmToken});
       final role = userDoc.data()?['role'] ?? 'viewer';
       final userRole =
           UserRoleLocal.values.firstWhere((r) => r.toString().contains(role), orElse: () => UserRoleLocal.VIEWER);
