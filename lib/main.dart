@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
           userRole: message.data.isNotEmpty && message.data.containsKey('userRole')? message.data['userRole'] : UserRoleLocal.COMMITTEE.name
       );
 
-      Get.snackbar("Hello", "here we go");
+      Get.snackbar(notification.title ?? "", notification.body ?? "");
 
     });
   }
@@ -105,6 +105,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
   void initState() {
     super.initState();
     requestAndRegisterNotification();
+    overlayPushNotification();
   }
 
   @override
