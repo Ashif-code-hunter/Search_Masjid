@@ -43,7 +43,7 @@ class MasjidController extends GetxController {
         image: masjidData['image'],
         type: masjidData['type'],
         members: members,
-        fcmToken: masjidData['fcmToken'],
+        fcmToken: masjidData['fcmToken'] ,
       );
 
       mData.add(masjid);

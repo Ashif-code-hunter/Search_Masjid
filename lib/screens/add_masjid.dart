@@ -43,7 +43,9 @@ class _AddMasjidState extends State<AddMasjid> {
             'address': '',
             "name": '',
             'image': '',
-            'type': ''
+            'type': '',
+            'fcmToken':'',
+            "members":[]
           },
         );
       }

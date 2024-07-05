@@ -75,6 +75,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await _messaging.getToken();
+      print("token $token");
       Get.find<AuthController>().setFCM(token ?? "");
     }
   }
