@@ -43,7 +43,7 @@ class CardHorizontal extends StatelessWidget {
                             topLeft: Radius.circular(6.0),
                             bottomLeft: Radius.circular(6.0)),
                         image: DecorationImage(
-                          image: AssetImage(img),
+                          image: NetworkImage(img),
                           fit: BoxFit.cover,
                         ))),
               ),

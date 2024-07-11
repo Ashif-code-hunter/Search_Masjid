@@ -134,7 +134,14 @@ class Announcements extends StatelessWidget {
           elevation: 0,
           backgroundColor: MyColors.primary,
           onPressed: () {
-            Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body:  _controller.document.toPlainText(),title: "Hello");
+            Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body: '''
+            Hello
+            bye
+            eee
+            -    - -  -
+            e
+            e
+            ''',title: "Hello");
           },
           label: const Text("Publish", style: TextStyle(color: Colors.white)),
           icon: const Icon(Icons.send, color: Colors.white),
