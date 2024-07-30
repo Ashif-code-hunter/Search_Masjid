@@ -49,6 +49,7 @@ class PushNotificationAPI {
   Future<bool> sendNotification({
     required String title,
     required String body,
+    required String bodyJson,
     required List<String> tokens,
     required String tag
   }) async {
@@ -90,7 +91,8 @@ class PushNotificationAPI {
       await FirebaseFirestore.instance.collection('notifications').doc().set({
         'title':title,
         'body':body,
-        'userRole':  tag
+        'userRole':  tag,
+        'bodyJson':bodyJson
       });
       return allSuccessful;
     }catch(e){

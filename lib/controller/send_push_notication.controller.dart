@@ -8,8 +8,8 @@ class SendPushController extends GetxController {
   PushNotificationAPI api = PushNotificationAPI();
 
 
-Future<bool> sendPushNotification({required String title, required String body, required String tag})async{
-  await api.sendNotification(title: title, body: body, tokens:fcmList, tag: tag).then((value){
+Future<bool> sendPushNotification({required String title, required String body,required  bodyJson, required String tag})async{
+  await api.sendNotification(title: title, body: body, tokens:fcmList, tag: tag,bodyJson: bodyJson).then((value){
     if(value == true){
       return true;
     }
@@ -17,7 +17,7 @@ Future<bool> sendPushNotification({required String title, required String body, 
   return false;
 }
 
-  Future<bool> searchUsers({required String title, required String body, required String tag}) async {
+  Future<bool> searchUsers({required String title, required String body,required String bodyJson, required String tag}) async {
    await api.searchFCMAPI().then((value){
      fcmList.clear();
       for (var documentSnapshot in value.docs) {
@@ -29,7 +29,10 @@ Future<bool> sendPushNotification({required String title, required String body, 
         }
       }
     });
-  final result = await sendPushNotification(title: title,body: body,tag: tag);
+  final result = await sendPushNotification(title: title,body: body,tag: tag,bodyJson: bodyJson);
+
+   Get.toNamed("/home");
+
    return result;
   }
 

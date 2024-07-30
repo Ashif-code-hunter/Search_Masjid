@@ -9,18 +9,21 @@ class MasjidAPI {
         FirebaseFirestore.instance.collection(collection);
     Future<List<QueryDocumentSnapshot<Object?>>> masjidList =
         masjids.get().then((value) => value.docs);
-    
     return masjidList;
   }
 
-  Future<List<DocumentSnapshot<Object?>>> searchMasjidsAPI(
-      String searchQuery) async {
-    CollectionReference masjids =
-        FirebaseFirestore.instance.collection("masjids");
+  Future<List<DocumentSnapshot<Object?>>> searchMasjidsAPI(String searchQuery) async {
+    CollectionReference masjids = FirebaseFirestore.instance.collection("masjids");
+
+    // Convert the search query to lowercase
+    String lowercaseQuery = searchQuery.toLowerCase();
+
+    // Get all documents where the lowercase name starts with the lowercase query
     QuerySnapshot<Object?> querySnapshot = await masjids
-        .where('name', isGreaterThanOrEqualTo: searchQuery)
-        .where('name', isLessThan: '${searchQuery}z')
+        .where('nameLowercase', isGreaterThanOrEqualTo: lowercaseQuery)
+        .where('nameLowercase', isLessThan: lowercaseQuery + 'z')
         .get();
+
     List<DocumentSnapshot<Object?>> masjidList = querySnapshot.docs;
     print(masjidList);
     return masjidList;

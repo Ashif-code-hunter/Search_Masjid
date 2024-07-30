@@ -1,6 +1,8 @@
-// ignore_for_file: no_logic_in_create_state
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:knm_masjid_app/controller/app.controller.dart';
 import 'package:knm_masjid_app/constants/Theme.dart';
@@ -14,6 +16,9 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   final appC = Get.find<AppController>();
+  QuillController _controller = QuillController.basic();
+
+
 
   @override
   void initState() {
@@ -65,6 +70,8 @@ class _NotificationsState extends State<Notifications> {
           itemCount: appC.notifications.length,
           itemBuilder: (BuildContext context, int index) {
             var notification = appC.notifications[index];
+
+
             return GestureDetector(
               onTap: () {
                 Get.to(() => NotificationDetailsPage(notification: notification));
@@ -91,6 +98,20 @@ class _NotificationsState extends State<Notifications> {
                               ),
                             ),
                             const SizedBox(height: 8),
+                            // QuillToolbar.simple(
+                            //   configurations: QuillSimpleToolbarConfigurations(
+                            //     controller: _controller,
+                            //     showSuperscript: false,
+                            //     showAlignmentButtons: false,
+                            //     showBackgroundColorButton: false,
+                            //     showBoldButton: false,
+                            //     showCenterAlignment: false,
+                            //     showClearFormat: false,,
+                            //     sharedConfigurations: const QuillSharedConfigurations(
+                            //       locale: Locale('de'),
+                            //     ),
+                            //   ),
+                            // ),
                             Text(
                               notification['body'] ?? 'No additional information',
                               style: const TextStyle(color: MyColors.muted),
@@ -116,30 +137,64 @@ class _NotificationsState extends State<Notifications> {
   }
 }
 
-class NotificationDetailsPage extends StatelessWidget {
+class NotificationDetailsPage extends StatefulWidget {
   final Map<String, dynamic> notification;
 
   const NotificationDetailsPage({Key? key, required this.notification})
       : super(key: key);
 
   @override
+  State<NotificationDetailsPage> createState() => _NotificationDetailsPageState();
+}
+
+class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
+  @override
   Widget build(BuildContext context) {
+    QuillController _controller = QuillController.basic();
+    _controller.readOnly = true;
+
+    String? body;
+
+    if(!(widget.notification['bodyJson'] == null || widget.notification['bodyJson'] == "")){
+      final json = jsonDecode(widget.notification['bodyJson']);
+      _controller.document = Document.fromJson(json);
+    }else{
+      setState(() {
+        body = widget.notification['body'];
+
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(notification['title'] ?? 'No Title'),
+        title: Text(widget.notification['title'] ?? 'No Title'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+          body == null ?  Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: QuillEditor.basic(
+                configurations: QuillEditorConfigurations(
+                  autoFocus: false,
+                  showCursor: false,
+                  controller: _controller,
+                  sharedConfigurations: const QuillSharedConfigurations(
+                    locale: Locale('de'),
+                  ),
+                ),
+              ),
+            ):
+
             Text(
-              notification['body'] ?? 'No additional information',
+             body ?? 'No additional information',
               style: const TextStyle(fontSize: 16.0),
             ),
             const SizedBox(height: 16.0),
             Text(
-              'Received: ${notification['time'] ?? 'Just now'}',
+              'Received: ${widget.notification['time'] ?? 'Just now'}',
               style: const TextStyle(color: MyColors.muted),
             ),
           ],

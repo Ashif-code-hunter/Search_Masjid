@@ -43,6 +43,9 @@ class AuthController extends GetxController {
           .doc(userCredential.user!.uid);
       final userDoc = await doc.get();
 
+
+
+
       if (!userDoc.exists) {
         throw Exception('User not found');
       }
@@ -50,6 +53,13 @@ class AuthController extends GetxController {
       final role = userDoc.data()?['role'] ?? 'viewer';
       final userRole =
           UserRoleLocal.values.firstWhere((r) => r.toString().contains(role), orElse: () => UserRoleLocal.VIEWER);
+      ///save fcm token in masjid table when masjid login
+      if(userRole ==UserRoleLocal.MASJID){
+        final masjidDoc = await FirebaseFirestore.instance
+            .collection('masjids')
+            .doc(userCredential.user!.uid);
+        await masjidDoc.update({'fcmToken': fcmToken});
+      }
       final userModel = UserModel(
         userID: userCredential.user!.uid,
         phoneNumber: userCredential.user!.phoneNumber,

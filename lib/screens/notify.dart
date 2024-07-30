@@ -18,6 +18,7 @@ class _NotifyState extends State<Notify> {
   final TextEditingController _messageController = TextEditingController();
   final PushNotificationAPI _notificationAPI = PushNotificationAPI();
   final List<int> _selectedIndexes = [];
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +137,7 @@ class _NotifyState extends State<Notify> {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              isLoading ? const CircularProgressIndicator():  ElevatedButton(
                 onPressed: () {
                   sendNotificationToMasjids();
                 },
@@ -158,12 +159,19 @@ class _NotifyState extends State<Notify> {
         return _masjidController.masjidList[index].fcmToken!;
       }).toList();
 
+      // print("ssss Token $tokens ${_masjidController.masjidList[0].}");
+      setState(() {
+        isLoading = true;
+      });
       bool result = await _notificationAPI.sendNotification(
         title: subject,
         body: message,
         tokens: tokens,
-        tag: 'Masjid',
+        tag: 'MASJID', bodyJson: '',
       );
+      setState(() {
+        isLoading = false;
+      });
 
       if (result) {
         Get.snackbar("Success", "Notifications sent successfully");

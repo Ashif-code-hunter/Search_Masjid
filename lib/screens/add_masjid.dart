@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+
 class AddMasjid extends StatefulWidget {
   const AddMasjid({Key? key}) : super(key: key);
 
@@ -16,44 +13,9 @@ class AddMasjid extends StatefulWidget {
 class _AddMasjidState extends State<AddMasjid> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final nameController = TextEditingController();
-  final addressController = TextEditingController();
-  final typeController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   String? selectedRole;
-
-  Future<String?> uploadPic() async {
-    final FirebaseStorage _storage = FirebaseStorage.instance;
-
-    // try {
-      // Get the file from the image picker
-      final XFile? pickedImageFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        preferredCameraDevice: CameraDevice.front,
-        imageQuality: 20,
-      );
-
-      if (pickedImageFile == null) return null;
-
-      // Create a reference to the location you want to upload to in Firebase
-      final String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      final Reference reference = _storage.ref().child("images/$fileName.jpg");
-
-      // Upload the file to Firebase
-      final UploadTask uploadTask = reference.putFile(File(pickedImageFile.path));
-
-      // Wait for the upload to complete and get the download URL
-      final TaskSnapshot taskSnapshot = await uploadTask;
-      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-
-      // Return the download URL
-      return downloadUrl;
-    // } catch (e) {
-    //   print("Error uploading image: $e");
-    //   return null;
-    // }
-  }
 
 
  Future<bool> createUser() async {
@@ -69,7 +31,7 @@ class _AddMasjidState extends State<AddMasjid> {
         'email': emailController.text.trim(),
         'role': selectedRole,
       });
-     final image = await uploadPic();
+
       if (selectedRole == 'MASJID') {
         await FirebaseFirestore.instance
             .collection('masjids')
@@ -78,10 +40,10 @@ class _AddMasjidState extends State<AddMasjid> {
           {
             "id": userCredential.user!.uid,
             'email': emailController.text.trim(),
-            'address': addressController.text,
-            "name": nameController.text,
-            'image': image,
-            'type': typeController.text,
+            'address': '',
+            "name": '',
+            'image': '',
+            'type': '',
             'fcmToken':'',
             "members":[]
           },
@@ -209,61 +171,6 @@ class _AddMasjidState extends State<AddMasjid> {
                     selectedRole = value;
                   });
                 },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: typeController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Type',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                  {
-                    return 'Please enter a valid type';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: addressController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                  {
-                    return 'Please enter a valid address';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: nameController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                  {
-                    return 'Please enter a valid Description';
-                  }
-                  return null;
-                },
-                maxLines: 4,
               ),
               const SizedBox(height: 20),
               ElevatedButton(

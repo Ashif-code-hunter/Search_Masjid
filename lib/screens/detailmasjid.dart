@@ -108,7 +108,7 @@ class DetailMasjid extends StatelessWidget {
                               avatar: type == 'sub'
                                   ? null
                                   : GFAvatar(
-                                      backgroundImage: AssetImage(
+                                      backgroundImage: NetworkImage(
                                           data.members?[index].image ?? ''),
                                     ),
                               icon: type == 'sub'
