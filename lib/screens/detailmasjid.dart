@@ -6,7 +6,8 @@ import 'package:knm_masjid_app/model/majid.dart';
 
 //widgets
 import 'package:knm_masjid_app/widgets/navbar.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailMasjid extends StatelessWidget {
   final GFBottomSheetController _controller = GFBottomSheetController();
@@ -23,9 +24,7 @@ class DetailMasjid extends StatelessWidget {
         backButton: true,
         getCurrentPage: () {},
         searchController: TextEditingController(),
-        searchOnChanged: () {
-          
-        },
+        searchOnChanged: () {},
       ),
       extendBody: true,
       backgroundColor: MyColors.bgColorScreen,
@@ -41,12 +40,14 @@ class DetailMasjid extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 10.0),
                     child: Text(data.name,
-                        style: const TextStyle(fontSize: 28.0, color: MyColors.text)),
+                        style: const TextStyle(
+                            fontSize: 28.0, color: MyColors.text)),
                   ),
                   Text(data.address,
                       overflow: TextOverflow.fade,
                       maxLines: 3,
-                      style: const TextStyle(color: MyColors.text, fontSize: 14.0)),
+                      style: const TextStyle(
+                          color: MyColors.text, fontSize: 14.0)),
                   const SizedBox(height: 28),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
@@ -55,51 +56,58 @@ class DetailMasjid extends StatelessWidget {
                           String type = data.members![index].type;
                           return GestureDetector(
                             onTap: () => {
-                              type == "main" ? Get.dialog(
-                                AlertDialog(
-                                  icon: GFAvatar(
-                                    shape: GFAvatarShape.standard,
-                                    radius: 50,
-                                    backgroundImage: AssetImage(
-                                        data.members?[index].image ?? ''),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  content: SizedBox(
-                                    height: 63,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data.members![index].name,
-                                          style: const TextStyle(
-                                              color: MyColors.text,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold),
+                              type == "main"
+                                  ? Get.dialog(AlertDialog(
+                                      icon: GFAvatar(
+                                        shape: GFAvatarShape.standard,
+                                        radius: 50,
+                                        backgroundImage: NetworkImage(
+                                            data.members?[index].image ?? ''),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      content: SizedBox(
+                                        height: 63,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data.members![index].name,
+                                              style: const TextStyle(
+                                                  color: MyColors.text,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              data.members![index].position,
+                                              style: const TextStyle(
+                                                  color: MyColors.text,
+                                                  fontSize: 14.0),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          data.members![index].position,
-                                          style: const TextStyle(
-                                              color: MyColors.text,
-                                              fontSize: 14.0),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    IconButton(
-                                        onPressed: (() {
-                                          Get.back();
-                                        }),
-                                        icon: const Icon(
-                                          Icons.chat_bubble,
-                                          color: MyColors.initial,
-                                        )),
-                                                                        IconButton(onPressed: (() {
-                                      Get.back();
-                                    }), icon: const Icon(Icons.call, color: MyColors.initial,)),
-                                  ]
-                                )
-                              ) : Container()
+                                      ),
+                                      actions: [
+                                          IconButton(
+                                              onPressed: (() async {
+                                                final Uri url = Uri.parse("https://wa.me/${data.members![index].phone}");
+                                                if (!await launchUrl(url)) {
+                                                  throw Exception('Could not launch $url');}
+                                              }),
+                                              icon: const Icon(
+                                                Icons.chat_bubble,
+                                                color: MyColors.initial,
+                                              )),
+                                          IconButton(
+                                              onPressed: (() {
+                                                launchUrlString("tel://${data.members![index].phone}");
+                                              }),
+                                              icon: const Icon(
+                                                Icons.call,
+                                                color: MyColors.initial,
+                                              )),
+                                        ]))
+                                  : Container()
                             },
                             child: GFListTile(
                               margin: EdgeInsets.symmetric(
@@ -144,8 +152,7 @@ class DetailMasjid extends StatelessWidget {
     );
   }
 
-  GFBottomSheet _buildBottomSheet(
-      Masjid data, BuildContext context) {
+  GFBottomSheet _buildBottomSheet(Masjid data, BuildContext context) {
     return GFBottomSheet(
       controller: _controller,
       animationDuration: 100,
@@ -155,13 +162,16 @@ class DetailMasjid extends StatelessWidget {
         decoration: const BoxDecoration(
             color: Colors.white,
             boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 0)]),
-        child: const GFListTile(
+        child:  GFListTile(
+          onTap: (){
+            launchUrlString("tel://${data.masjidPhone}");
+          },
           icon: Icon(
             Icons.phone,
             color: MyColors.initial,
           ),
           titleText: 'Contact',
-          subTitleText: 'Contact The Masjid',
+          subTitleText: data.name,
         ),
       ),
       contentBody: Container(
@@ -192,7 +202,10 @@ class DetailMasjid extends StatelessWidget {
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)))),
-                        onPressed: () {
+                        onPressed: () async {
+                          final Uri url = Uri.parse("https://wa.me/${data.masjidPhone}");
+                          if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');}
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -208,8 +221,10 @@ class DetailMasjid extends StatelessWidget {
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)))),
-                        onPressed: () {
-                          // Respond to button press
+                        onPressed: () async {
+                          final Uri url = Uri.parse("https://www.google.com/maps/search/${data.address.replaceAll(" ", "_")}");
+                          if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');}
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -225,23 +240,28 @@ class DetailMasjid extends StatelessWidget {
           ],
         ),
       ),
-      stickyFooter: Container(
-        color: MyColors.initial,
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'Get in touch',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            Text(
-              "1234567890",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-          ],
+      stickyFooter: InkWell(
+        onTap: (){
+          launchUrlString("tel://${data.masjidPhone}");
+        },
+        child: Container(
+          color: MyColors.initial,
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Get in touch',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              Text(
+                data.masjidPhone ?? "",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
       stickyFooterHeight: 50,

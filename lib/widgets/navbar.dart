@@ -10,6 +10,8 @@ import 'package:knm_masjid_app/screens/notifications.dart';
 import 'package:knm_masjid_app/screens/search.dart';
 import 'package:knm_masjid_app/widgets/input.dart';
 
+import '../controller/masjid.controller.dart';
+
 class Navbar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final String categoryOne;
@@ -185,7 +187,10 @@ class _NavbarState extends State<Navbar> {
                       controller: widget.searchController,
                       onChanged: widget.searchOnChanged,
                       autofocus: widget.searchAutofocus,
-                      suffixIcon: Icon(Icons.zoom_in, color: MyColors.muted),
+                      suffixIcon:  IconButton(
+                        icon: Icon( Icons.clear),
+                        onPressed: ()=>MasjidController.to.reset(),
+                      ),
                       onTap: () {
                         if (!widget.isOnSearch) {
                           Navigator.push(

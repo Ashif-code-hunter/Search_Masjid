@@ -17,7 +17,7 @@ Future<bool> sendPushNotification({required String title, required String body,r
   return false;
 }
 
-  Future<bool> searchUsers({required String title, required String body,required String bodyJson, required String tag}) async {
+  Future<bool>  searchUsers({required String title, required String body,required String bodyJson, required String tag}) async {
    await api.searchFCMAPI().then((value){
      fcmList.clear();
       for (var documentSnapshot in value.docs) {

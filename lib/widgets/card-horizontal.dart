@@ -8,6 +8,7 @@ import 'package:knm_masjid_app/controller/fav.controller.dart';
 class CardHorizontal extends StatelessWidget {
   const CardHorizontal(
       {this.title = "Placeholder Title",
+      this.address = "Placeholder Title",
       this.cta = "",
       this.img = "https://via.placeholder.com/200",
       required this.id,
@@ -17,6 +18,7 @@ class CardHorizontal extends StatelessWidget {
   final String img;
   final String title;
   final String id;
+  final String address;
 
   static void defaultFunc() {
     print("the function works!");
@@ -56,6 +58,12 @@ class CardHorizontal extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4,
+                            style: TextStyle(
+                                color: MyColors.header, fontSize: 13,fontWeight: FontWeight.w600)),
+                        SizedBox(height: 4,),
+                        Text(address,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 4,
                             style: TextStyle(

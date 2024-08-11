@@ -6,6 +6,7 @@ class Masjid {
   String type;
   List<Member>? members;
   String? fcmToken; // Add this field
+  String? masjidPhone; // Add this field
 
   Masjid({
     required this.id,
@@ -13,6 +14,7 @@ class Masjid {
     required this.address,
     required this.image,
     required this.type,
+    required this.masjidPhone,
     this.members,
     this.fcmToken,
   });
@@ -24,6 +26,7 @@ class Masjid {
       address: json['address'],
       image: json['image'],
       type: json['type'],
+      masjidPhone: json['masjidPhone'],
       members: (json['members'] as List).map(
         (e) {
           return Member(
@@ -45,6 +48,7 @@ class Masjid {
       'name': name,
       'address': address,
       'image': image,
+      'masjidPhone':masjidPhone,
       'type': type,
       'members': members,
       'fcmToken': fcmToken, // Add this field
@@ -53,7 +57,7 @@ class Masjid {
 
   @override
   String toString() {
-    return 'Masjid{id: $id, name: $name, address: $address, image: $image, type: $type, members: $members, fcmToken: $fcmToken}';
+    return 'Masjid{id: $id, name: $name, address: $address, image: $image, type: $type, members: $members, fcmToken: $fcmToken, masjidPhone: $masjidPhone}';
   }
 }
 

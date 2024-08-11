@@ -50,6 +50,7 @@ class FavoriteController extends GetxController {
         address: masjidData['address'],
         image: masjidData['image'],
         type: masjidData['type'],
+        masjidPhone: masjidData['masjidPhone'],
         members: (masjidData['members'] as List<dynamic>)
             .map((e) => Member.fromJson(e))
             .toList(),

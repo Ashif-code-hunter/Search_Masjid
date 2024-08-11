@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
         getCurrentPage: () {},
         searchController: TextEditingController(),
         searchOnChanged: (String value) {
-          Get.find<MasjidController>().searchQuary(value);
+          Get.find<MasjidController>().searchQuery(value);
         },
       ),
       backgroundColor: MyColors.bgColorScreen,
@@ -37,77 +37,63 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder(
-                  future: MasjidAPI().getAllMasjidAPI('masjids', null),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      List<DocumentSnapshot<Object?>> data = snapshot.data!;
-                      // Move this to a separate method
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Get.find<MasjidController>().setMasjid(data);
-                      });
-                      return ListView.builder(
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> masjid =
-                          data[index].data() as Map<String, dynamic>;
-                          Masjid masjidData = Masjid.fromJson(masjid);
-                          String type = masjidData.type.toString();
-                          return type == "registered"
-                              ? Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 10.0, top: 10),
-                            child: _buildCardSquare(
-                                context,
-                                masjidData.name,
-                                masjidData.address,
-                                masjidData.image,
-                                masjidData),
-                          )
-                              : Padding(
-                            padding: const EdgeInsets.only(top: 16.0),
-                            child: _buildCardHorizontal(
-                                context,
-                                masjidData.name,
-                                masjidData.address,
-                                masjidData.image,
-                                masjidData
-                            ),
-                          );
-                        },
-                        itemCount: data.length,
+              child: Obx(() {
+                if (MasjidController.to.masjidList.isEmpty) {
+                  return const Center(child: Text("Searched Masjid is not available"));
+                } else {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      Masjid masjidData = MasjidController.to.masjidList[index];
+                      String type = masjidData.type.toString();
+                      return type == "registered"
+                          ? Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0, top: 10),
+                        child: _buildCardSquare(
+                            context,
+                            masjidData.name,
+                            masjidData.address,
+                            masjidData.image,
+                            masjidData),
+                      )
+                          : Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: _buildCardHorizontal(
+                            context: context,
+                            name: masjidData.name,
+                            address: masjidData.address,
+                            img: masjidData.image,
+                            data: masjidData),
                       );
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
+                    },
+                    itemCount: MasjidController.to.masjidList.length,
+                  );
+                }
+              }),
             )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body: "FCM",title: "FCM List body");
-        },
-        child: const Icon(Icons.send),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     // Get.find<SendPushController>().searchUsers(tag: UserRoleLocal.MASJID.name,body: "FCM",title: "FCM List body");
+      //   },
+      //   child: const Icon(Icons.send),
+      // ),
     );
   }
-  Widget _buildCardHorizontal(BuildContext context, String tag, String title,
-      String img, Masjid data) {
+  Widget _buildCardHorizontal(
+      {required BuildContext context,
+        required  String name,
+        required String address,
+        required  String img,
+        required Masjid data}) {
     return GestureDetector(
       child: CardHorizontal(
         cta: "View more",
-        title: title,
+        title: name,
         img: img,
         id: data.id,
+        address: address,
       ),
       onTap: () {
         Get.toNamed('/detailmasjid', arguments: data);
