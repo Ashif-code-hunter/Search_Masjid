@@ -14,6 +14,7 @@ import 'package:knm_masjid_app/firebase_options.dart';
 import 'package:knm_masjid_app/model/push_notification_model/push_notification_model.dart';
 import 'package:knm_masjid_app/screens/add_masjid.dart';
 import 'package:knm_masjid_app/screens/announcements.dart';
+import 'package:knm_masjid_app/screens/crash_screen.dart';
 import 'package:knm_masjid_app/screens/detailmasjid.dart';
 import 'package:knm_masjid_app/screens/favorites.dart';
 import 'package:knm_masjid_app/screens/login.dart';
@@ -24,8 +25,9 @@ import 'package:knm_masjid_app/screens/home.dart';
 import 'package:knm_masjid_app/screens/profile.dart';
 import 'package:knm_masjid_app/screens/notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:knm_masjid_app/screens/splash.dart';
 import 'controller/send_push_notication.controller.dart';
-
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
   ///below code is commented as we don't want to save the message each time the user receives the message instead we are saving one time at the time of sending.
@@ -49,6 +51,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
   await GetStorage.init();
   await dotenv.load(fileName: "assets/.env");
   runApp(MyApp());
@@ -78,6 +81,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
       print("token $token");
       Get.find<AuthController>().setFCM(token ?? "");
     }
+
   }
 
   Future<void> overlayPushNotification() async {
@@ -112,7 +116,7 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'KNM Masjid Management',
-        initialRoute: "/home",
+        initialRoute: "/splash",
         debugShowCheckedModeBanner: false,
         initialBinding: BindingsBuilder(() {
           Get.put(AuthController(), permanent: true);
@@ -127,6 +131,8 @@ class _MyAppState extends State<MyApp>  with WidgetsBindingObserver{
           GetPage(name: '/login', page: () => const Login()),
           GetPage(name: '/home', page: () => const Home()),
           GetPage(name: '/detailmasjid', page: () => DetailMasjid()),
+          GetPage(name: '/crash', page: () => CrashScreen()),
+          GetPage(name: '/splash', page: () => SplashScreen()),
           GetPage(name: '/announcements', page: () => const Announcements()),
           GetPage(name: '/add_masjid', page: () => const AddMasjid(), middlewares: [AuthMiddleware()]),
           GetPage(name: '/favorites', page: () => const Favorites(), middlewares: [AuthMiddleware()]),
