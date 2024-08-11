@@ -21,11 +21,11 @@ class MasjidController extends GetxController {
 
     if (masjids.isNotEmpty) {
       for (var masjidData in masjids) {
-        List<dynamic>? membersData = masjidData['members'] as List<dynamic>?;
+        List? membersData = masjidData['members'] as List?;
 
         List<Member> members = membersData
             ?.map((e) {
-          if (e is Map<String, dynamic>) {
+          if (e is Map) {
             return Member(
               image: e['image'] ?? '',
               phone: e['phone'],
@@ -35,7 +35,7 @@ class MasjidController extends GetxController {
             );
           } else {
             if (kDebugMode) {
-              print('Warning: An element in membersData is not a Map<String, dynamic>');
+              print('Warning: An element in membersData is not a Map');
             }
             return null;
           }
@@ -45,18 +45,24 @@ class MasjidController extends GetxController {
             .toList() ??
             [];
 
-        Masjid masjid = Masjid(
-            id: masjidData['id'],
-            name: masjidData['name'],
-            address: masjidData['address'],
-            image: masjidData['image'],
-            type: masjidData['type'],
-            members: members,
-            fcmToken: masjidData['fcmToken'],
-            masjidPhone: masjidData['masjidPhone']
-        );
+        // Check if name, image, or address is empty
+        if (masjidData['name'] != null && masjidData['name'].isNotEmpty &&
+            masjidData['image'] != null && masjidData['image'].isNotEmpty &&
+            masjidData['address'] != null && masjidData['address'].isNotEmpty) {
 
-        mData.add(masjid);
+          Masjid masjid = Masjid(
+              id: masjidData['id'],
+              name: masjidData['name'],
+              address: masjidData['address'],
+              image: masjidData['image'],
+              type: masjidData['type'],
+              members: members,
+              fcmToken: masjidData['fcmToken'],
+              masjidPhone: masjidData['masjidPhone']
+          );
+
+          mData.add(masjid);
+        }
       }
     }
 
