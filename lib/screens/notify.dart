@@ -75,8 +75,7 @@ class _NotifyState extends State<Notify> {
                                           borderRadius:
                                               BorderRadius.circular(50.0),
                                           image: DecorationImage(
-                                            image: AssetImage(
-                                                "assets/img/muslim-men2.jpg"),
+                                            image: NetworkImage(masjid.image),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
